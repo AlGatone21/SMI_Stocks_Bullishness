@@ -134,9 +134,9 @@ def bullishness(news_analyzed):
     negative = 0
     neutral = 0 
     for i in range(0, len(news_analyzed)):
-        if news_analyzed["Sentiment"].iloc[i][0] == "positiv":
+        if news_analyzed["Sentiment"].iloc[i][0] == "Positiv":
             positive += 1
-        elif news_analyzed["Sentiment"].iloc[i][0] == "negativ":
+        elif news_analyzed["Sentiment"].iloc[i][0] == "Negativ":
             negative += 1
         else:
             neutral += 1
