@@ -9,3 +9,4 @@ transformers
 torch
 plotly
 python-dotenv
+pymongo
