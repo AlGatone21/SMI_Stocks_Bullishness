@@ -206,7 +206,7 @@ def bullishness(news_analyzed):
     return bullishness
 
 # Load the model
-model = load_pickle('linear_model.pickle')
+model = load_pickle('linear_reg_model.pickle')
 
 
 def predict_stock_price(open, sentiment, volume, volatility):
