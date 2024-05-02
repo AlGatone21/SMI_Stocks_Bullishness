@@ -207,7 +207,7 @@ def bullishness(news_analyzed):
 
 # Load the model
 
-#model = pickle.load(open("linear_model.sav", "rb"))
+model = pickle.load(open("AlGatone21/SMI_Stocks_Bullishness/linear_model.sav", "rb"))
 
 
 @st.cache_data()
