@@ -323,13 +323,13 @@ def app():
         data_upper = data.copy()
         data_upper.loc[target_date] = upper_limit
         fig.add_trace(go.Scatter(x=data_upper.index, y=data_upper.values, mode='lines', name='Upper Limit',
-                                line=dict(color='rgba(255,0,0,0.4)')))
+                                line=dict(color='rgba(0,0,255,0.4)', dash='dash')))
 
         # Add the lower confidence interval boundary
         data_lower = data.copy()
         data_lower.loc[target_date] = lower_limit
         fig.add_trace(go.Scatter(x=data_lower.index, y=data_lower.values, mode='lines', name='Lower Limit',
-                                line=dict(color='rgba(0,0,255,0.4)')))
+                                line=dict(color='rgba(255,0,0,0.4)', dash='dash')))
 
         fig.update_layout(autosize=False, height=400, xaxis_title = "Date", yaxis_title = "CHF", title="1 Week Target Price")
         fig.update_yaxes(range=[min(data.values)*0.9, max(data.values)*1.1])
