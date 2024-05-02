@@ -210,15 +210,17 @@ model = load_pickle('linear_model.pickle')
 
 @st.cache_data()
 def predict_stock_price(open, sentiment, volume, volatility):
-    return model.predict([[1, open, sentiment, volume, volatility]])[0]
+    returns = model.predict([[1, sentiment, volume, volatility]])[0]
+    return open * (1 + returns)
 
 
 def predict_lower_limit(open, sentiment, volume, volatility, alpha = 0.05):
-    return model.conf_int(alpha)[0]["const"] + model.conf_int(alpha)[0]["Open"] * open + model.conf_int(alpha)[0]["Sentiment_Score_t1"] * sentiment + model.conf_int(alpha)[0]["Volume_t1"] * volume + model.conf_int(alpha)[0]["Volatility_t1"] * volatility
-
+    returns =  model.conf_int(alpha)[0]["const"] + model.conf_int(alpha)[0]["Sentiment_Score_t1"] * sentiment + model.conf_int(alpha)[0]["Volume_t1"] * volume + model.conf_int(alpha)[0]["Volatility_t1"] * volatility
+    return open * (1 + returns)
 
 def predict_upper_limit(open, sentiment, volume, volatility, alpha = 0.05):
-    return model.conf_int(alpha)[1]["const"] + model.conf_int()[1]["Open"] * open + model.conf_int(alpha)[1]["Sentiment_Score_t1"] * sentiment + model.conf_int(alpha)[1]["Volume_t1"] * volume + model.conf_int(alpha)[1]["Volatility_t1"] * volatility
+    returns =  model.conf_int(alpha)[1]["const"] + model.conf_int(alpha)[1]["Sentiment_Score_t1"] * sentiment + model.conf_int(alpha)[1]["Volume_t1"] * volume + model.conf_int(alpha)[1]["Volatility_t1"] * volatility
+    return open * (1 + returns)
 
 smi = pd.read_excel("SMI.xlsx") # Load the SMI Companies
 
