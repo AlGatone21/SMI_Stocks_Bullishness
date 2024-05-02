@@ -60,8 +60,9 @@ def get_stock_news():
     df = []
     for source in ["nzz.ch/wirtschaft", "finews.ch"]:
         google_news = GNews(max_results=10)
-        response = GNews.get_news_by_site(google_news, site =source)
-        df.append(response)
+        response = GNews.get_news_by_site(google_news, site = source)
+        for i in response:
+            df.append(i)
 
     # get the url
     url_data = []
