@@ -53,11 +53,11 @@ def get_stock_series(ticker):
         return "data not available"
 
 # load the stock news from Google News
-#@st.cache_data()
+@st.cache_data()
 def get_stock_news(company):
 
     # Get the news data from Google News
-    google_news = GNews(period="7d", max_results=10)
+    google_news = GNews()
     df = google_news.get_news(company)
 
     # get the url
@@ -110,7 +110,7 @@ def get_stock_news(company):
     return news
 
 
-#@st.cache_data()
+@st.cache_data()
 def analyze_news_sentiment(news):
 
     pipe = pipeline("text-classification", model="scherrmann/GermanFinBert_SC_Sentiment") # Load the German sentiment analysis model
@@ -128,7 +128,7 @@ def analyze_news_sentiment(news):
     news["Sentiment"] = sentiment_data
     return news
 
-#@st.cache_data()
+@st.cache_data()
 def bullishness(news_analyzed):
     positive = 0
     negative = 0
