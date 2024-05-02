@@ -190,8 +190,15 @@ def app():
 
     with col2:
         # create a gauge plot with the bullishness sentiment
-        news = get_stock_news(company)
-        news_analyzed = analyze_news_sentiment(news)
+        try:
+            print(f"Getting news for company: {company}")
+            news = get_stock_news(company)
+            print(f"News data: {news}")
+            news_analyzed = analyze_news_sentiment(news)
+        except Exception as e:
+            print(f"An error occurred: {e}")
+            news = "No news data available"
+            news_analyzed = "No news analysis available"
         bullishness_sentiment = bullishness(news_analyzed)
 
         fig = go.Figure(go.Indicator(
@@ -202,8 +209,6 @@ def app():
             ))
         fig.update_layout(title="Current Bullishness Index")
         st.plotly_chart(fig, use_container_width=True)
-
-st.write(news)
 
 if __name__ == '__main__':
     app()
