@@ -10,6 +10,7 @@ import pandas as pd
 from datetime import datetime
 from newspaper import Article
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
+from transformers import pipeline
 import torch
 import plotly.graph_objects as go
 import matplotlib.colors as mcolors
@@ -111,57 +112,20 @@ def get_stock_news(company):
 
 @st.cache_data()
 def analyze_news_sentiment(news):
-    # Load the pre-trained sentiment analysis model
-    model_name = "ProsusAI/finbert"
-    tokenizer = AutoTokenizer.from_pretrained(model_name)
-    model = AutoModelForSequenceClassification.from_pretrained(model_name)
 
-    # Define a function to preprocess the text
-    def preprocess_text(text):
-        # Tokenize the text
-        inputs = tokenizer.encode_plus(
-            text,
-            add_special_tokens=True,
-            return_tensors="pt",
-            truncation=True,
-            max_length=512
-        )
-
-        # Return the preprocessed inputs
-        return inputs
-
-    # Define a function to predict the sentiment
-    def predict_sentiment(inputs):
-        # Make predictions
-        outputs = model(**inputs)
-        logits = outputs.logits
-        probabilities = torch.softmax(logits, dim=1).detach().numpy()[0]
-
-        # Get the predicted sentiment label
-        labels = ["negative", "neutral", "positive"]
-        predicted_label = labels[probabilities.argmax()]
-
-        # Return the predicted sentiment label and probabilities
-        return predicted_label, probabilities
+    pipe = pipeline("text-classification", model="scherrmann/GermanFinBert_SC_Sentiment") # Load the German sentiment analysis model
 
     # Analyze the sentiment of each news article
     sentiment_data = []
-    counter = 0
     for article in news["Text"]:
-        # Preprocess the text
-        inputs = preprocess_text(article)
-
-        # Predict the sentiment
-        sentiment_label, sentiment_probabilities = predict_sentiment(inputs)
-
-        # Append the sentiment label and probabilities to the sentiment data
-        sentiment_data.append((sentiment_label, sentiment_probabilities))
+        try:
+            sentiment = pipe(article)[0]["label"]
+            sentiment_data.append(sentiment)
+        except:
+            sentiment_data.append("not_found")
 
     # Add the sentiment data to the news dataframe
     news["Sentiment"] = sentiment_data
-
-
-    # Return the news dataframe with sentiment analysis results
     return news
 
 @st.cache_data()
@@ -170,9 +134,9 @@ def bullishness(news_analyzed):
     negative = 0
     neutral = 0 
     for i in range(0, len(news_analyzed)):
-        if news_analyzed["Sentiment"].iloc[i][0] == "positive":
+        if news_analyzed["Sentiment"].iloc[i][0] == "positiv":
             positive += 1
-        elif news_analyzed["Sentiment"].iloc[i][0] == "negative":
+        elif news_analyzed["Sentiment"].iloc[i][0] == "negativ":
             negative += 1
         else:
             neutral += 1
