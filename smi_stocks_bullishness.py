@@ -315,11 +315,11 @@ def app():
         min_lower_limit = predict_lower_limit(open_price, sentiment, volume, volatility, 0.01)
 
         prediction_volatility = round(((max_upper_limit - min_lower_limit) / prediction) * 100, 2)
-        prediction_volatility_labels = "Very High" if prediction_volatility >= 50 else "High" if prediction_volatility >= 25 else "Medium" if prediction_volatility >= 10 else "Low" if prediction_volatility >= 5 else "Very Low" 
-
+        
         st.write(f"The {confidence}% confidence interval for the 1 week stock price is between {round(lower_limit, 2)} and {round(upper_limit, 2)} CHF")
-        st.write(f"The prediction volatility is {prediction_volatility_labels}")
-        st.write(f'The prediction volatility is {prediction_volatility}%!!!')
+        if prediction_volatility > 30:
+            st.markdown("<div style='color: red; font-weight: bold;'>Warning:</div>", unsafe_allow_html=True)
+            st.write(f'The prediction volatility is high with {prediction_volatility}% of the predicted price. This indicates a high uncertainty in the prediction.')
 
         # Update the series with the 1 week target price
         target_date = datetime.today() + timedelta(days=7)
