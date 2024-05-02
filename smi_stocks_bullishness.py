@@ -179,7 +179,7 @@ if page == "Stock Analysis":
     col1, col2 = st.columns([1,2])
 
     with col1:
-        st.image("bull-illustration-vector.jpg", use_column_width=True)
+        st.image("smi_stocks_bullishness.png", use_column_width=True)
     with col2:
         st.title('S&P 500 Stocks Bullishness Sentiment')
 
