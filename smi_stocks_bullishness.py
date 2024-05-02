@@ -110,7 +110,7 @@ def get_stock_news(company):
     return news
 
 
-@st.cache_data()
+#@st.cache_data()
 def analyze_news_sentiment(news):
 
     pipe = pipeline("text-classification", model="scherrmann/GermanFinBert_SC_Sentiment") # Load the German sentiment analysis model
@@ -128,7 +128,7 @@ def analyze_news_sentiment(news):
     news["Sentiment"] = sentiment_data
     return news
 
-@st.cache_data()
+#@st.cache_data()
 def bullishness(news_analyzed):
     positive = 0
     negative = 0
@@ -202,6 +202,8 @@ def app():
             ))
         fig.update_layout(title="Current Bullishness Index")
         st.plotly_chart(fig, use_container_width=True)
+
+st.write("the total number of articles is", len(news_analyzed))
 
 if __name__ == '__main__':
     app()
