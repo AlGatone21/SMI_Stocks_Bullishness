@@ -4,7 +4,7 @@
 
 import streamlit as st
 import yfinance as yf
-from gnews import GNews 
+import gnews 
 from tqdm import tqdm
 import pandas as pd
 from datetime import datetime
@@ -60,7 +60,7 @@ def get_stock_news():
     df = []
     for source in ["nzz.ch/wirtschaft", "finews.ch"]:
         google_news = GNews(max_results=10)
-        response = google_news.get_news_by_site(source)
+        response = GNews.get_news_by_site(google_news, site = source)
         for i in response:
             df.append(i)
 
