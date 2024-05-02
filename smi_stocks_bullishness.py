@@ -204,7 +204,7 @@ def app():
 
         # Create a plot of the stock development
 # Create a plot of the stock development
-        fig = go.Figure(data=go.Scatter(x=data.index, y=data.values, fill='tozeroy', fillcolor='rgba(0,0,255,0.05)'))
+        fig = go.Figure(data=go.Scatter(x=data.index, y=data.values, fill='tozeroy', fillcolor=f'rgba({color},0.05)', line=dict(color=color)))
         fig.update_layout(autosize=False, height=400, xaxis_title = "Date", yaxis_title = "USD", title="1 Month Stock Development")  # Change this to your desired height
         fig.update_yaxes(range=[min(data.values)*0.9, max(data.values)*1.1])  # Adjust y-axis to the values of the series
         st.plotly_chart(fig, use_container_width=True)
