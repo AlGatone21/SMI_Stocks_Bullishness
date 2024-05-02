@@ -338,6 +338,7 @@ def app():
                                 line=dict(color='rgba(255,0,0,0.4)', dash='dash')))
 
         fig.update_layout(autosize=True, height=400, xaxis_title = "Date", yaxis_title = "CHF", title="1 Week Target Price")
+        fig.update_yaxes(range=[min(data_lower.values)*0.9, max(data_upper.values)*1.1])
         st.plotly_chart(fig, use_container_width=True)
 
         st.write("## Appendix")
