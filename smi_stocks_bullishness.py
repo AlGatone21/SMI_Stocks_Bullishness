@@ -291,7 +291,8 @@ def app():
         sentiment = bullishness_sentiment/100
 
         prediction = predict_stock_price(open_price, sentiment, volume, volatility)
-        st.write(f"The predicted stock price for {ticker} is {round(prediction, 2)} CHF")
+        st.write(f"The predicted 1 week stock price for {ticker} is {round(prediction, 2)} CHF")
+        st.write(f'The predicted return is {round((prediction - open_price) / open_price * 100, 2)}%'))
         
         if st.checkbox("Show News"):
             st.write("## Recent News")
