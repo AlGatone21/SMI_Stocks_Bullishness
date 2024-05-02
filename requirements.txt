@@ -1,0 +1,10 @@
+yfinance
+streamlit
+gnews
+tqdm
+pandas
+datetime
+newspaper3k
+transformenrs
+torch
+plotly
