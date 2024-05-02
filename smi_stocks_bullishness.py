@@ -42,7 +42,7 @@ def search_news(source, start_date, end_date, max_items=100):
             "link": item.find("link").text,
             "pubDate": item.find("pubDate").text,
             "source": item.find("source").text,
-            "image": item.find("image").text if item.find("image") is not None else ""
+            "description": item.find("description").text
         })
 
     return data
@@ -122,13 +122,13 @@ def get_stock_news():
     for i in range(0,len(df)):
         publisher_data.append(df[i]["source"])
 
-    # get the image link
-    image_data = []
+    # get the description
+    description_data = []
     for i in range(0,len(df)):
-        image_data.append(df[i]["image"])
+        description_data.append(df[i]["description"])
 
     # Create a dataframe with the news data
-    df = pd.DataFrame({"Title": title_data, "URL" : url_data, "Date" : published_date_data, "Publisher" : publisher_data, "Image" : image_data})
+    df = pd.DataFrame({"Title": title_data, "URL" : url_data, "Date" : published_date_data, "Publisher" : publisher_data, "Description" : description_data})
 
     text_list = []
     for i in range(0, len(df)):
