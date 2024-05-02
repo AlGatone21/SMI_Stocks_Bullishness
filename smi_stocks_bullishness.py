@@ -214,11 +214,11 @@ def predict_stock_price(open, sentiment, volume, volatility):
 
 @st.cache_data()
 def predict_lower_limit(open, sentiment, volume, volatility, alpha = 0.05):
-    return model.conf_int(alpha)[0]["const"] + model.conf_int()[0]["Open"] * open + model.conf_int()[0]["Sentiment_Score_t1"] * sentiment + model.conf_int()[0]["Volume_t1"] * volume + model.conf_int()[0]["Volatility_t1"] * volatility
+    return model.conf_int(alpha)[0]["const"] + model.conf_int(alpha)[0]["Open"] * open + model.conf_int(alpha)[0]["Sentiment_Score_t1"] * sentiment + model.conf_int(alpha)[0]["Volume_t1"] * volume + model.conf_int(alpha)[0]["Volatility_t1"] * volatility
 
 @st.cache_data()
 def predict_upper_limit(open, sentiment, volume, volatility, alpha = 0.05):
-    return model.conf_int(alpha)[1]["const"] + model.conf_int()[1]["Open"] * open + model.conf_int()[1]["Sentiment_Score_t1"] * sentiment + model.conf_int()[1]["Volume_t1"] * volume + model.conf_int()[1]["Volatility_t1"] * volatility
+    return model.conf_int(alpha)[1]["const"] + model.conf_int()[1]["Open"] * open + model.conf_int(alpha)[1]["Sentiment_Score_t1"] * sentiment + model.conf_int(alpha)[1]["Volume_t1"] * volume + model.conf_int(alpha)[1]["Volatility_t1"] * volatility
 
 smi = pd.read_excel("SMI.xlsx") # Load the SMI Companies
 
@@ -304,8 +304,9 @@ def app():
         st.markdown(f"The predicted 1 week stock price for {ticker} is {round(prediction, 2)} CHF, which implies a predicted 1 week return of  <span style='color: {color3}; font-weight: bold;'>{return1w}%</span>", unsafe_allow_html=True)
 
         # Calculate the upper and lower confidence interval boundaries
-        upper_limit = predict_upper_limit(open_price, sentiment, volume, volatility)
-        lower_limit = predict_lower_limit(open_price, sentiment, volume, volatility)
+        alpha = st.select_slider("Select the confidence level", options=[0.01, 0.05, 0.1, 0.2, 0.3, 0.4, 0.5])
+        upper_limit = predict_upper_limit(open_price, sentiment, volume, volatility, alpha)
+        lower_limit = predict_lower_limit(open_price, sentiment, volume, volatility, alpha)
 
         # Update the series with the 1 week target price
         target_date = datetime.today() + timedelta(days=7)
