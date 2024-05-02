@@ -18,7 +18,8 @@ import requests
 from lxml import etree
 import feedparser
 import pickle
-import io
+import joblib
+from io import BytesIO
 
 
 
@@ -209,7 +210,7 @@ def bullishness(news_analyzed):
 
 model_url = "https://raw.githubusercontent.com/AlGatone21/SMI_Stocks_Bullishness/main/path/to/linear_model.sav"
 
-loaded_model = loaded_model = pickle.load(open(model_url, 'rb'))
+model = joblib.load(BytesIO(requests.get(model_url).content))
 
 
 @st.cache_data()
