@@ -177,7 +177,7 @@ def bullishness(news_analyzed):
 
 def app():
     smi = pd.read_excel("SMI.xlsx") # Load the SMI Companies
-    
+
     st.set_page_config(page_title="SMI Stocks Bullishness Index", page_icon="📈", layout="wide")
 
     col1, col2 = st.columns([1,3])
@@ -202,11 +202,13 @@ def app():
     with col1.container():
         data = get_stock_series(ticker)
 
-        fig = go.Figure(data=go.Scatter(x=data.index, y=data.values))
+        # Create a plot of the stock development
+        fig = go.Figure(data=go.Scatter(x=data.index, y=data.values, fill='tozeroy'))
         fig.update_layout(autosize=False, height=400, xaxis_title = "Date", yaxis_title = "USD", title="1 Month Stock Development")  # Change this to your desired height
         st.plotly_chart(fig, use_container_width=True)
 
     with col2:
+        # create a gauge plot with the bullishness sentiment
         news = get_stock_news(company)
         news_analyzed = analyze_news_sentiment(news)
         bullishness_sentiment = bullishness(news_analyzed)
