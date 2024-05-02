@@ -226,9 +226,6 @@ def app():
         st.session_state['accepted_disclaimer'] = False
 
     if not st.session_state['accepted_disclaimer']:
-        import os
-        cwd = os.getcwd()
-        st.write("Current working directory:", cwd)
         # Disclaimer page
         col1, col2 = st.columns([1,3])
         with col1:
