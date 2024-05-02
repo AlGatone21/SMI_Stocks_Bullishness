@@ -207,6 +207,7 @@ def bullishness(news_analyzed):
 
 # Load the model
 model = load_pickle('linear_model.pickle')
+rmse = 21.26279476587989
 
 
 @st.cache_data()
@@ -297,12 +298,28 @@ def app():
         red3, green3, blue3 = [int(255 * x) for x in rgb3]  # Scale the RGB values to the range 0-255        
         st.markdown(f"The predicted 1 week stock price for {ticker} is {round(prediction, 2)} CHF, which implies a predicted 1 week return of  <span style='color: {color3}; font-weight: bold;'>{return1w}%</span>", unsafe_allow_html=True)
 
-        # Update the series with the 1 week target price
-        target_date = datetime.today() + timedelta(days=7)
-        data.loc[target_date] = prediction
+        upper_limit = prediction + rmse
+        lower_limit = prediction - rmse
 
         # Create a plot of the updated stock development
-        fig = go.Figure(data=go.Scatter(x=data.index, y=data.values, fill='tozeroy', fillcolor=f'rgba({red3},{green3},{blue3},0.05)', line=dict(color=color3)))
+        fig = go.Figure()
+
+        # Add the main line
+        fig.add_trace(go.Scatter(x=data.index, y=data.values, mode='lines', name='Prediction',
+                                line=dict(color=color3)))
+
+        # Add the upper confidence interval boundary
+        data_upper = data.copy()
+        data_upper.loc[target_date] = upper_limit
+        fig.add_trace(go.Scatter(x=data_upper.index, y=data_upper.values, mode='lines', name='Upper Limit',
+                                line=dict(color='rgba(255,0,0,0.4)')))
+
+        # Add the lower confidence interval boundary
+        data_lower = data.copy()
+        data_lower.loc[target_date] = lower_limit
+        fig.add_trace(go.Scatter(x=data_lower.index, y=data_lower.values, mode='lines', name='Lower Limit',
+                                line=dict(color='rgba(0,0,255,0.4)')))
+
         fig.update_layout(autosize=False, height=400, xaxis_title = "Date", yaxis_title = "CHF", title="1 Week Target Price")
         fig.update_yaxes(range=[min(data.values)*0.9, max(data.values)*1.1])
         st.plotly_chart(fig, use_container_width=True)
