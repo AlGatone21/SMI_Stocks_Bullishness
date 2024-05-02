@@ -57,7 +57,7 @@ def get_stock_series(ticker):
 def get_stock_news(company):
 
     # Get the news data from Google News
-    google_news = GNews()
+    google_news = GNews(period="7d", max_results=10)
     df = google_news.get_news(company)
 
     # get the url
