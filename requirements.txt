@@ -1,6 +1,6 @@
 yfinance
 streamlit
-gnews
+gnews==0.3.6
 tqdm
 pandas
 datetime
@@ -13,3 +13,8 @@ pymongo
 lxml_html_clean
 openpyxl
 matplotlib
+beautifulsoup4
+bs4
+dnspython
+feedparser
+requests
