@@ -4,7 +4,7 @@
 
 import streamlit as st
 import yfinance as yf
-import gnews 
+from gnews import GNews, get_news_by_site
 from tqdm import tqdm
 import pandas as pd
 from datetime import datetime
