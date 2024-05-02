@@ -317,7 +317,7 @@ def app():
 
         # Add the main line
         fig.add_trace(go.Scatter(x=data.index, y=data.values, mode='lines', name='Prediction',
-                                line=dict(color=color3)))
+                                line=dict(color=color3), fill='tozeroy', fillcolor=f'rgba({red3},{green3},{blue3},0.05)'))
 
         # Add the upper confidence interval boundary
         data_upper = data.copy()
