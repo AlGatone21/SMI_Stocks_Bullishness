@@ -250,18 +250,7 @@ def app():
             fig.update_layout(title="Current SMI Bullishness Index")
             st.plotly_chart(fig, use_container_width=True)
         
-        if st.checkbox("Show News"):
-            st.write("## Recent News")
-
-            for index, row in news.iterrows():
-                with col1:
-                    st.image(row['Image'])
-
-                with col2:
-                    st.write(f"### {row['Title']}")
-                    st.write(f"Published on {row['Date']} by {row['Publisher']}")
-                    st.write(f"URL: {row['URL']}")
-                    st.write("---")
+        st.write(news)
 
 if __name__ == '__main__':
     app()
