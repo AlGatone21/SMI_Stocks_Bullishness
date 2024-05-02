@@ -294,7 +294,22 @@ def app():
         return1w = round((prediction - open_price) / open_price * 100, 2)
         color3 = "green" if return1w >= 0 else "red"
         st.markdown(f"The predicted 1 week stock price for {ticker} is {round(prediction, 2)} CHF, which implies a predicted 1 week return of  <span style='color: {color3}; font-weight: bold;'>{return1w}%</span>", unsafe_allow_html=True)
+       
+        # Create a plot of the stock development
+        fig = go.Figure(data=go.Scatter(x=data.index, y=data.values, fill='tozeroy', fillcolor=f'rgba({red},{green},{blue},0.05)', line=dict(color=color)))
+        fig.update_layout(autosize=False, height=400, xaxis_title = "Date", yaxis_title = "CHF", title="1 Month Stock Development")  # Change this to your desired height
+        fig.update_yaxes(range=[min(data.values)*0.9, max(data.values)*1.1])  # Adjust y-axis to the values of the series
+        st.plotly_chart(fig, use_container_width=True)
 
+        # Update the series with the 1 week target price
+        target_date = datetime.today() + timedelta(days=7)
+        data.loc[target_date] = prediction
+
+        # Create a plot of the updated stock development
+        fig = go.Figure(data=go.Scatter(x=data.index, y=data.values, fill='tozeroy', fillcolor=f'rgba({red},{green},{blue},0.05)', line=dict(color=color)))
+        fig.update_layout(autosize=False, height=400, xaxis_title = "Date", yaxis_title = "CHF", title="1 Month Stock Development with 1 Week Target Price")  # Change this to your desired height
+        fig.update_yaxes(range=[min(data.values)*0.9, max(data.values)*1.1])  # Adjust y-axis to the values of the series
+        st.plotly_chart(fig, use_container_width=True)
         
         if st.checkbox("Show News"):
             st.write("## Recent News")
