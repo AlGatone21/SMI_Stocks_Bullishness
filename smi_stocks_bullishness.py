@@ -319,7 +319,7 @@ def app():
 
         st.write(f"The {confidence}% confidence interval for the 1 week stock price is between {round(lower_limit, 2)} and {round(upper_limit, 2)} CHF")
         st.write(f"The prediction volatility is {prediction_volatility_labels}")
-        st.write(f'The prediction volatility is {prediction_volatility}%')
+        st.write(f'The prediction volatility is {prediction_volatility}%!!!')
 
         # Update the series with the 1 week target price
         target_date = datetime.today() + timedelta(days=7)
