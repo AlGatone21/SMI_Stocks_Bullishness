@@ -207,7 +207,7 @@ def bullishness(news_analyzed):
 @st.cache_data()
 def predict_stock_price(open, sentiment, volume, volatility):
     model = pickle.load(open("stock_prediction_model.pkl", "rb"))
-    return model.predict([[open, sentiment, volume, volatility]])[0]
+    return model.predict([[1, open, sentiment, volume, volatility]])[0]
 
 
 smi = pd.read_excel("SMI.xlsx") # Load the SMI Companies
