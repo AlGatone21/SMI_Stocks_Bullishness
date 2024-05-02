@@ -17,6 +17,7 @@ import matplotlib.colors as mcolors
 import requests
 from lxml import etree
 import feedparser
+import pickle
 
 
 
@@ -203,6 +204,11 @@ def bullishness(news_analyzed):
         bullishness = 0
     return bullishness
 
+@st.cache_data()
+def predict_stock_price(open, sentiment, volume, volatility):
+    model = pickle.load(open("stock_prediction_model.pkl", "rb"))
+    return model.predict([[open, sentiment, volume, volatility]])[0]
+
 
 smi = pd.read_excel("SMI.xlsx") # Load the SMI Companies
 
@@ -273,6 +279,15 @@ def app():
                         'bar': {'color': color2}}))
             fig.update_layout(title="Current SMI Bullishness Index")
             st.plotly_chart(fig, use_container_width=True)
+        
+        st.write("## Stock Prediction")
+        open_price = get_stock_current_price(ticker)
+        volume = get_stock_volume(ticker)
+        volatility = get_stock_volatility(ticker)
+        sentiment = bullishness_sentiment/100
+
+        prediction = predict_stock_price(open_price, sentiment, volume, volatility)
+        st.write(f"The predicted stock price for {ticker} is {round(prediction, 2)} CHF")
         
         if st.checkbox("Show News"):
             st.write("## Recent News")
