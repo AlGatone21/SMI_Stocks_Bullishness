@@ -223,11 +223,14 @@ def app():
         news_analyzed = analyze_news_sentiment(news)
         bullishness_sentiment = bullishness(news_analyzed)
 
+        color2 = "green" if bullishness_sentiment >= 0 else "red"
+
         fig = go.Figure(go.Indicator(
             mode="gauge+number",
             value=bullishness_sentiment,
             domain={'x': [0, 1], 'y': [0, 1]},
-            gauge={'axis': {'range': [-100, 100]}},
+            gauge={'axis': {'range': [-100, 100]},
+                    'bar': {'color': color2}
             ))
         fig.update_layout(title="Current SMI Bullishness Index")
         st.plotly_chart(fig, use_container_width=True)
