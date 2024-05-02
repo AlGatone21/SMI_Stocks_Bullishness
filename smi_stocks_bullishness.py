@@ -93,7 +93,6 @@ def get_stock_news(com):
     news = df[df["Text"] != "not_found"]
     return news
 
-sp500 = pd.read_html("https://en.wikipedia.org/wiki/List_of_S%26P_500_companies")[0] # get the S&P 500 companies from wikipedia
 
 @st.cache_data()
 def analyze_news_sentiment(news):
@@ -163,42 +162,44 @@ def bullishness(news_analyzed):
         else:
             neutral += 1
 
-    bullishness = round((positive) / (positive + negative + neutral) *100, 2)
+    bullishness = round((positive - negative) / (positive + negative + neutral) *100, 2)
     return bullishness
+
+
+smi = pd.read_excel("/teamspace/studios/this_studio/Capstone_Project/SMI.xlsx") # Load the SMI Companies
 
 ############################################################################################################
 # Streamlit App
 ###########################################################################################################
-st.set_page_config(page_title="S&P 500 Stocks Bullishness Sentiment", page_icon="📈", layout="wide")
+st.set_page_config(page_title="SMI Stocks Bullishness Index", page_icon="📈", layout="wide")
 
+col1, col2 = st.columns([1,3])
 
-st.sidebar.title("Navigation")
+with col1:
+    st.image("/teamspace/studios/this_studio/Capstone_Project/SMI_Stocks_Bullishness.png", use_column_width=True)
+with col2:
+    st.title('SMI Stocks Bullishness Index')
+    st.write("This app is a Stock Bullishness Sentiment Analysis tool that can be used to analyze and predict SMI stocks returns. The information provided in this app is for informational purposes only and should not be considered as financial advice.")
 
-page = st.sidebar.selectbox("Select a page", ["Stock Analysis", "Read News"])
-if page == "Stock Analysis":
-    col1, col2 = st.columns([1,2])
-
-    with col1:
-        st.image("smi_stocks_bullishness.png", use_column_width=True)
-    with col2:
-        st.title('S&P 500 Stocks Bullishness Sentiment')
-
-    st.write("This app is a Stock Bullishness Sentiment Analysis tool that can be used to analyze and predict S&P 500 stocks bullishness sentiment.The information provided in this app is for informational purposes only and should not be considered as financial advice.")
-
-    options = sp500["Security"].tolist()
+    options = smi["Company"].tolist()
     company = st.selectbox("Select the company to be inspected", options)
-    ticker = sp500[sp500["Security"] == company]["Symbol"].values[0]
-    st.write(f"The current price of {company} ({ticker}) is {get_stock_current_price(ticker)} USD")
+
+    ticker = smi[smi["Company"] == company]["Ticker"].values[0]
+    st.write(f"The current price of {company} ({ticker}) is {get_stock_current_price(ticker)} CHF")
+
     returns = get_stock_returns(ticker)
     color = "green" if returns >= 0 else "red"
     st.markdown(f"The returns of {ticker} in the last 30 days is <span style='color: {color}; font-weight: bold;'>{returns}%</span>", unsafe_allow_html=True)
 
+col1, col2 = st.columns([1,1])
+with col1.container():
     data = get_stock_series(ticker)
 
     fig = go.Figure(data=go.Scatter(x=data.index, y=data.values))
-    fig.update_layout(autosize=False, height=300, xaxis_title = "Date", yaxis_title = "USD")  # Change this to your desired height
+    fig.update_layout(autosize=False, height=400, xaxis_title = "Date", yaxis_title = "USD", title="1 Month Stock Development")  # Change this to your desired height
     st.plotly_chart(fig, use_container_width=True)
-    
+
+with col2:
     news = get_stock_news(company)
     news_analyzed = analyze_news_sentiment(news)
     bullishness_sentiment = bullishness(news_analyzed)
@@ -207,14 +208,8 @@ if page == "Stock Analysis":
         mode="gauge+number",
         value=bullishness_sentiment,
         domain={'x': [0, 1], 'y': [0, 1]},
-        title={'text': "Bullishness Sentiment"},
-        gauge={'axis': {'range': [None, 100]}},
+        gauge={'axis': {'range': [-100, 100]}},
         ))
+    fig.update_layout(title="Current Bullishness Index")
     st.plotly_chart(fig, use_container_width=True)
 
-elif page == "Read News":
-    col1, col2 = st.columns([1,2])
-    with col1:
-        st.image("bull-illustration-vector.jpg", use_column_width=True)
-    with col2:
-        st.title('S&P 500 Stocks Bullishness Sentiment')
