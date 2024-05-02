@@ -291,7 +291,6 @@ def app():
         sentiment = bullishness_sentiment/100
 
         prediction = predict_stock_price(open_price, sentiment, volume, volatility)
-        st.write(f"The predicted 1 week stock price for {ticker} is {round(prediction, 2)} CHF")
         return1w = round((prediction - open_price) / open_price * 100, 2)
         color3 = "green" if return1w >= 0 else "red"
         st.markdown(f"The predicted 1 week stock price for {ticker} is {round(prediction, 2)} CHF, which implies a predicted 1 week return of  <span style='color: {color3}; font-weight: bold;'>{return1w}%</span>", unsafe_allow_html=True)
