@@ -185,6 +185,8 @@ smi = pd.read_excel("SMI.xlsx") # Load the SMI Companies
 
 def app():
 
+
+
     st.set_page_config(page_title="SMI Stocks Bullishness Index", page_icon="📈", layout="wide")
 
     col1, col2 = st.columns([1,3])
@@ -195,17 +197,18 @@ def app():
         st.title('SMI Stocks Bullishness Index')
         st.write("This app is a Stock Bullishness Sentiment Analysis tool that can be used to analyze and predict SMI stocks returns. The information provided in this app is for informational purposes only and should not be considered as financial advice.")
 
-        options = smi["Company"].tolist()
-        company = st.selectbox("Select the company to be inspected", options)
+        if st.button('I Understand and Accept'):
+            options = smi["Company"].tolist()
+            company = st.selectbox("Select the company to be inspected", options)
 
-        ticker = smi[smi["Company"] == company]["Ticker"].values[0]
-        st.write(f"The current price of {company} ({ticker}) is {get_stock_current_price(ticker)} CHF")
+            ticker = smi[smi["Company"] == company]["Ticker"].values[0]
+            st.write(f"The current price of {company} ({ticker}) is {get_stock_current_price(ticker)} CHF")
 
-        returns = get_stock_returns(ticker)
-        color = "green" if returns >= 0 else "red"
-        rgb = mcolors.to_rgb(color)  # Convert the color name to RGB values
-        red, green, blue = [int(255 * x) for x in rgb]  # Scale the RGB values to the range 0-255
-        st.markdown(f"The return of {ticker} in the last 30 days is <span style='color: {color}; font-weight: bold;'>{returns}%</span>", unsafe_allow_html=True)
+            returns = get_stock_returns(ticker)
+            color = "green" if returns >= 0 else "red"
+            rgb = mcolors.to_rgb(color)  # Convert the color name to RGB values
+            red, green, blue = [int(255 * x) for x in rgb]  # Scale the RGB values to the range 0-255
+            st.markdown(f"The return of {ticker} in the last 30 days is <span style='color: {color}; font-weight: bold;'>{returns}%</span>", unsafe_allow_html=True)
 
     col1, col2 = st.columns([1,1])
     with col1.container():
