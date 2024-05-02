@@ -1,6 +1,6 @@
 yfinance
 streamlit
-gnews == 0.3.6
+gnews = 0.3.6
 tqdm
 pandas
 datetime
