@@ -97,7 +97,7 @@ def get_stock_news():
     # get the url
     url_data = []
     for i in range(0,len(df)):
-        url_data.append(df[i]["url"])
+        url_data.append(df[i]["link"])
 
     # get the title   
     title_data = []
@@ -107,7 +107,7 @@ def get_stock_news():
     # Convert the published date to a datetime object    
     published_date_data = []
     for i in range(0,len(df)):
-        date_string = df[i]["published date"]
+        date_string = df[i]["pubDate"]
         date_format = "%a, %d %b %Y %H:%M:%S %Z"
         date_object = datetime.strptime(date_string, date_format)
         new_date_format = "%d/%m/%Y"
@@ -118,7 +118,7 @@ def get_stock_news():
     # get the publisher
     publisher_data = []
     for i in range(0,len(df)):
-        publisher_data.append(df[i]["publisher"]["title"])
+        publisher_data.append(df[i]["source"])
 
     # Create a dataframe with the news data
     df = pd.DataFrame({"Title": title_data, "URL" : url_data, "Date" : published_date_data, "Publisher" : publisher_data})
