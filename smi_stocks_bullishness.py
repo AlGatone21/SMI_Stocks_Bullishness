@@ -196,13 +196,14 @@ def app():
 
     if not st.session_state['accepted_disclaimer']:
         # Disclaimer page
+        col1, col2 = st.columns([1,3])
         with col1:
             st.image("SMI_Stocks_Bullishness.png", use_column_width=True)
         with col2:
             st.title('Disclaimer')
             st.write("This app is a Stock Bullishness Sentiment Analysis tool that can be used to analyze and predict SMI stocks returns. The information provided in this app is for informational purposes only and should not be considered as financial advice.")
-        if st.button('I Understand and Accept'):
-            st.session_state['accepted_disclaimer'] = True
+            if st.button('I Understand and Accept'):
+                st.session_state['accepted_disclaimer'] = True
     else:
         st.set_page_config(page_title="SMI Stocks Bullishness Index", page_icon="📈", layout="wide")
 
