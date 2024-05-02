@@ -18,6 +18,7 @@ import requests
 from lxml import etree
 import feedparser
 import pickle
+import io
 
 
 
