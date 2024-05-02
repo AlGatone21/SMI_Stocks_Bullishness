@@ -191,12 +191,12 @@ def app():
     with col2:
         # create a gauge plot with the bullishness sentiment
         try:
-            print(f"Getting news for company: {company}")
+            st.write(f"Getting news for company: {company}")
             news = get_stock_news(company)
-            print(f"News data: {news}")
+            st.write(f"News data: {news}")
             news_analyzed = analyze_news_sentiment(news)
         except Exception as e:
-            print(f"An error occurred: {e}")
+            st.write(f"An error occurred: {e}")
             news = "No news data available"
             news_analyzed = "No news analysis available"
         bullishness_sentiment = bullishness(news_analyzed)
