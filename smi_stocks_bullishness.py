@@ -174,45 +174,49 @@ smi = pd.read_excel("SMI.xlsx") # Load the SMI Companies
 ############################################################################################################
 # Streamlit App
 ###########################################################################################################
-st.set_page_config(page_title="SMI Stocks Bullishness Index", page_icon="📈", layout="wide")
 
-col1, col2 = st.columns([1,3])
+def app():
+    st.set_page_config(page_title="SMI Stocks Bullishness Index", page_icon="📈", layout="wide")
 
-with col1:
-    st.image("SMI_Stocks_Bullishness.png", use_column_width=True)
-with col2:
-    st.title('SMI Stocks Bullishness Index')
-    st.write("This app is a Stock Bullishness Sentiment Analysis tool that can be used to analyze and predict SMI stocks returns. The information provided in this app is for informational purposes only and should not be considered as financial advice.")
+    col1, col2 = st.columns([1,3])
 
-    options = smi["Company"].tolist()
-    company = st.selectbox("Select the company to be inspected", options)
+    with col1:
+        st.image("SMI_Stocks_Bullishness.png", use_column_width=True)
+    with col2:
+        st.title('SMI Stocks Bullishness Index')
+        st.write("This app is a Stock Bullishness Sentiment Analysis tool that can be used to analyze and predict SMI stocks returns. The information provided in this app is for informational purposes only and should not be considered as financial advice.")
 
-    ticker = smi[smi["Company"] == company]["Ticker"].values[0]
-    st.write(f"The current price of {company} ({ticker}) is {get_stock_current_price(ticker)} CHF")
+        options = smi["Company"].tolist()
+        company = st.selectbox("Select the company to be inspected", options)
 
-    returns = get_stock_returns(ticker)
-    color = "green" if returns >= 0 else "red"
-    st.markdown(f"The returns of {ticker} in the last 30 days is <span style='color: {color}; font-weight: bold;'>{returns}%</span>", unsafe_allow_html=True)
+        ticker = smi[smi["Company"] == company]["Ticker"].values[0]
+        st.write(f"The current price of {company} ({ticker}) is {get_stock_current_price(ticker)} CHF")
 
-col1, col2 = st.columns([1,1])
-with col1.container():
-    data = get_stock_series(ticker)
+        returns = get_stock_returns(ticker)
+        color = "green" if returns >= 0 else "red"
+        st.markdown(f"The returns of {ticker} in the last 30 days is <span style='color: {color}; font-weight: bold;'>{returns}%</span>", unsafe_allow_html=True)
 
-    fig = go.Figure(data=go.Scatter(x=data.index, y=data.values))
-    fig.update_layout(autosize=False, height=400, xaxis_title = "Date", yaxis_title = "USD", title="1 Month Stock Development")  # Change this to your desired height
-    st.plotly_chart(fig, use_container_width=True)
+    col1, col2 = st.columns([1,1])
+    with col1.container():
+        data = get_stock_series(ticker)
 
-with col2:
-    news = get_stock_news(company)
-    news_analyzed = analyze_news_sentiment(news)
-    bullishness_sentiment = bullishness(news_analyzed)
+        fig = go.Figure(data=go.Scatter(x=data.index, y=data.values))
+        fig.update_layout(autosize=False, height=400, xaxis_title = "Date", yaxis_title = "USD", title="1 Month Stock Development")  # Change this to your desired height
+        st.plotly_chart(fig, use_container_width=True)
 
-    fig = go.Figure(go.Indicator(
-        mode="gauge+number",
-        value=bullishness_sentiment,
-        domain={'x': [0, 1], 'y': [0, 1]},
-        gauge={'axis': {'range': [-100, 100]}},
-        ))
-    fig.update_layout(title="Current Bullishness Index")
-    st.plotly_chart(fig, use_container_width=True)
+    with col2:
+        news = get_stock_news(company)
+        news_analyzed = analyze_news_sentiment(news)
+        bullishness_sentiment = bullishness(news_analyzed)
 
+        fig = go.Figure(go.Indicator(
+            mode="gauge+number",
+            value=bullishness_sentiment,
+            domain={'x': [0, 1], 'y': [0, 1]},
+            gauge={'axis': {'range': [-100, 100]}},
+            ))
+        fig.update_layout(title="Current Bullishness Index")
+        st.plotly_chart(fig, use_container_width=True)
+
+if __name__ == '__main__':
+    app()
