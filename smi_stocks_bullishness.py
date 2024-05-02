@@ -248,10 +248,9 @@ def app():
             st.write("## Recent News")
 
             # Loop over the items in the news DataFrame
-            for _, row in news.iterrows():
+            for article in range(0, len(news_analyzed)):
                 # Display the title and link of each item
-                st.write(f"[{row['title']}]({row['url']})")
-                st.write(row['description'])
+                st.write(f"[{news_analyzed[article]['title']}]({news_analyzed[article]['url']})")
 
 if __name__ == '__main__':
     app()
