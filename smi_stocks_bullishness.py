@@ -53,7 +53,7 @@ def get_stock_series(ticker):
         return "data not available"
 
 # load the stock news from Google News
-@st.cache_data()
+#@st.cache_data()
 def get_stock_news(company):
 
     # Get the news data from Google News
