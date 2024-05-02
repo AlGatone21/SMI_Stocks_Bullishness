@@ -45,6 +45,7 @@ def search_news(source, start_date, end_date, max_items=100):
 
     # Convert the data into a DataFrame
     df = pd.DataFrame(data)
+    return df
 
 # load the current stock price from Yahoo Finance
 @st.cache_data()
