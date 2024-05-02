@@ -316,6 +316,7 @@ def app():
 
         st.write(f"The {confidence}% confidence interval for the 1 week stock price is between {round(lower_limit, 2)} and {round(upper_limit, 2)} CHF")
         st.write(f"The prediction confidence is {prediction_confidence_labels}")
+        st.write(f'The prediction confidence is {prediction_confidence} %')
         # Update the series with the 1 week target price
         target_date = datetime.today() + timedelta(days=7)
         data.loc[target_date] = prediction
