@@ -16,6 +16,7 @@ import plotly.graph_objects as go
 import matplotlib.colors as mcolors
 import requests
 from lxml import etree
+import feedparser
 
 
 
@@ -245,7 +246,12 @@ def app():
         
         if st.checkbox("Show News"):
             st.write("## Recent News")
-            st.write(news_analyzed)
+
+            # Loop over the items in the news DataFrame
+            for _, row in news.iterrows():
+                # Display the title and link of each item
+                st.write(f"[{row['title']}]({row['url']})")
+                st.write(row['description'])
 
 if __name__ == '__main__':
     app()
