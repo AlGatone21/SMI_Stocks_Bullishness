@@ -11,3 +11,4 @@ plotly
 python-dotenv
 pymongo
 lxml_html_clean
+openpyxl
