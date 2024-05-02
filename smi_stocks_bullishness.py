@@ -43,9 +43,7 @@ def search_news(source, start_date, end_date, max_items=100):
             "source": item.find("source").text
         })
 
-    # Convert the data into a DataFrame
-    df = pd.DataFrame(data)
-    return df
+    return data
 
 # load the current stock price from Yahoo Finance
 @st.cache_data()
