@@ -184,20 +184,26 @@ smi = pd.read_excel("SMI.xlsx") # Load the SMI Companies
 ###########################################################################################################
 
 def app():
+    if 'accepted_disclaimer' not in st.session_state:
+        st.session_state['accepted_disclaimer'] = False
 
-
-
-    st.set_page_config(page_title="SMI Stocks Bullishness Index", page_icon="📈", layout="wide")
-
-    col1, col2 = st.columns([1,3])
-
-    with col1:
-        st.image("SMI_Stocks_Bullishness.png", use_column_width=True)
-    with col2:
-        st.title('SMI Stocks Bullishness Index')
+    if not st.session_state['accepted_disclaimer']:
+        # Disclaimer page
+        st.title('Disclaimer')
         st.write("This app is a Stock Bullishness Sentiment Analysis tool that can be used to analyze and predict SMI stocks returns. The information provided in this app is for informational purposes only and should not be considered as financial advice.")
-
         if st.button('I Understand and Accept'):
+            st.session_state['accepted_disclaimer'] = True
+    else:
+        st.set_page_config(page_title="SMI Stocks Bullishness Index", page_icon="📈", layout="wide")
+
+        col1, col2 = st.columns([1,3])
+
+        with col1:
+            st.image("SMI_Stocks_Bullishness.png", use_column_width=True)
+        with col2:
+            st.title('SMI Stocks Bullishness Index')
+            st.write("This app is a Stock Bullishness Sentiment Analysis tool that can be used to analyze and predict SMI stocks returns. The information provided in this app is for informational purposes only and should not be considered as financial advice.")
+
             options = smi["Company"].tolist()
             company = st.selectbox("Select the company to be inspected", options)
 
@@ -210,36 +216,36 @@ def app():
             red, green, blue = [int(255 * x) for x in rgb]  # Scale the RGB values to the range 0-255
             st.markdown(f"The return of {ticker} in the last 30 days is <span style='color: {color}; font-weight: bold;'>{returns}%</span>", unsafe_allow_html=True)
 
-    col1, col2 = st.columns([1,1])
-    with col1.container():
-        data = get_stock_series(ticker)
+        col1, col2 = st.columns([1,1])
+        with col1.container():
+            data = get_stock_series(ticker)
 
-        # Create a plot of the stock development
-        fig = go.Figure(data=go.Scatter(x=data.index, y=data.values, fill='tozeroy', fillcolor=f'rgba({red},{green},{blue},0.05)', line=dict(color=color)))
-        fig.update_layout(autosize=False, height=400, xaxis_title = "Date", yaxis_title = "CHF", title="1 Month Stock Development")  # Change this to your desired height
-        fig.update_yaxes(range=[min(data.values)*0.9, max(data.values)*1.1])  # Adjust y-axis to the values of the series
-        st.plotly_chart(fig, use_container_width=True)
+            # Create a plot of the stock development
+            fig = go.Figure(data=go.Scatter(x=data.index, y=data.values, fill='tozeroy', fillcolor=f'rgba({red},{green},{blue},0.05)', line=dict(color=color)))
+            fig.update_layout(autosize=False, height=400, xaxis_title = "Date", yaxis_title = "CHF", title="1 Month Stock Development")  # Change this to your desired height
+            fig.update_yaxes(range=[min(data.values)*0.9, max(data.values)*1.1])  # Adjust y-axis to the values of the series
+            st.plotly_chart(fig, use_container_width=True)
 
-    with col2:
-        # create a gauge plot with the bullishness sentiment
-        news = get_stock_news()
-        news_analyzed = analyze_news_sentiment(news)
-        bullishness_sentiment = bullishness(news_analyzed)
+        with col2:
+            # create a gauge plot with the bullishness sentiment
+            news = get_stock_news()
+            news_analyzed = analyze_news_sentiment(news)
+            bullishness_sentiment = bullishness(news_analyzed)
 
-        color2 = "green" if bullishness_sentiment >= 0 else "red"
+            color2 = "green" if bullishness_sentiment >= 0 else "red"
 
-        fig = go.Figure(go.Indicator(
-            mode="gauge+number",
-            value=bullishness_sentiment,
-            domain={'x': [0, 1], 'y': [0, 1]},
-            gauge={'axis': {'range': [-100, 100]},
-                    'bar': {'color': color2}}))
-        fig.update_layout(title="Current SMI Bullishness Index")
-        st.plotly_chart(fig, use_container_width=True)
-    
-    if st.checkbox("Show News"):
-        st.write("## Recent News")
-        st.write(news_analyzed)
+            fig = go.Figure(go.Indicator(
+                mode="gauge+number",
+                value=bullishness_sentiment,
+                domain={'x': [0, 1], 'y': [0, 1]},
+                gauge={'axis': {'range': [-100, 100]},
+                        'bar': {'color': color2}}))
+            fig.update_layout(title="Current SMI Bullishness Index")
+            st.plotly_chart(fig, use_container_width=True)
+        
+        if st.checkbox("Show News"):
+            st.write("## Recent News")
+            st.write(news_analyzed)
 
 if __name__ == '__main__':
     app()
