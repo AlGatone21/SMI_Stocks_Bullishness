@@ -230,8 +230,7 @@ def app():
             value=bullishness_sentiment,
             domain={'x': [0, 1], 'y': [0, 1]},
             gauge={'axis': {'range': [-100, 100]},
-                    'bar': {'color': color2}
-            ))
+                    'bar': {'color': color2}}))
         fig.update_layout(title="Current SMI Bullishness Index")
         st.plotly_chart(fig, use_container_width=True)
     
