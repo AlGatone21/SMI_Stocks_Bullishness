@@ -314,7 +314,7 @@ def app():
         max_upper_limit = predict_upper_limit(open_price, sentiment, volume, volatility, 0.01)
         min_lower_limit = predict_lower_limit(open_price, sentiment, volume, volatility, 0.01)
 
-        prediction_volatility = 100 - round((max_upper_limit - min_lower_limit) / open_price * 100, 2)
+        prediction_volatility = 100 - round((max_upper_limit - min_lower_limit) / prediction * 100, 2)
         prediction_volatility_labels = "Very High" if prediction_volatility >= 50 else "High" if prediction_volatility >= 25 else "Medium" if prediction_volatility >= 10 else "Low" if prediction_volatility >= 5 else "Very Low" 
 
         st.write(f"The {confidence}% confidence interval for the 1 week stock price is between {round(lower_limit, 2)} and {round(upper_limit, 2)} CHF")
