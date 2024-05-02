@@ -76,7 +76,7 @@ def get_stock_news(com):
     global progress_bar
     progress_bar = st.progress(0)
     text_list = []
-    for i in tqdm(range(0, len(df))):
+    for i in range(0, len(df)):
         article = Article(df["URL"][i])
         try:
             article.download()
