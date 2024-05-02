@@ -114,7 +114,7 @@ def get_stock_news():
     # Get the news data from Google News
     df = []
     for source in ["Neue Zürcher Zeitung Wirtschaft", "Neue Zürcher Zeitung Finanz", "Inside Paradeplatz", "Finews.ch", "SRF Wirtschaft"]:
-        response = search_news(source, seven_days_ago_str, today_str, max_items=10)
+        response = search_news(source, seven_days_ago_str, today_str)
         for i in response:
             df.append(i)
 
