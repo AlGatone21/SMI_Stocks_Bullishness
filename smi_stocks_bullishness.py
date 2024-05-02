@@ -89,8 +89,6 @@ def get_stock_news(company):
     # Create a dataframe with the news data
     df = pd.DataFrame({"Title": title_data, "URL" : url_data, "Date" : published_date_data, "Publisher" : publisher_data})
 
-    global progress_bar
-    progress_bar = st.progress(0)
     text_list = []
     for i in range(0, len(df)):
         article = Article(df["URL"][i])
@@ -98,13 +96,10 @@ def get_stock_news(company):
             article.download()
             article.parse()
             text = article.text
-            text_list.append(text)
-            progress_bar.progress(i/len(df))    
+            text_list.append(text)   
         except:
             text_list.append("not_found")
-            progress_bar.progress(i/len(df))
 
-    progress_bar.empty()
     df["Text"] = text_list
     news = df[df["Text"] != "not_found"]
     return news
@@ -193,7 +188,7 @@ def app():
         try:
             st.write(f"Getting news for company: {company}")
             news = get_stock_news(company)
-            st.write(f"News data: {news}")
+            st.write(news)
             news_analyzed = analyze_news_sentiment(news)
         except Exception as e:
             st.write(f"An error occurred: {e}")
