@@ -166,7 +166,7 @@ def bullishness(news_analyzed):
     return bullishness
 
 
-smi = pd.read_excel("/teamspace/studios/this_studio/Capstone_Project/SMI.xlsx") # Load the SMI Companies
+smi = pd.read_excel("SMI.xlsx") # Load the SMI Companies
 
 ############################################################################################################
 # Streamlit App
@@ -176,7 +176,7 @@ st.set_page_config(page_title="SMI Stocks Bullishness Index", page_icon="📈", 
 col1, col2 = st.columns([1,3])
 
 with col1:
-    st.image("/teamspace/studios/this_studio/Capstone_Project/SMI_Stocks_Bullishness.png", use_column_width=True)
+    st.image("SMI_Stocks_Bullishness.png", use_column_width=True)
 with col2:
     st.title('SMI Stocks Bullishness Index')
     st.write("This app is a Stock Bullishness Sentiment Analysis tool that can be used to analyze and predict SMI stocks returns. The information provided in this app is for informational purposes only and should not be considered as financial advice.")
