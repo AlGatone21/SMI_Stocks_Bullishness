@@ -331,8 +331,7 @@ def app():
         fig.add_trace(go.Scatter(x=data_lower.index, y=data_lower.values, mode='lines', name='Lower Limit',
                                 line=dict(color='rgba(255,0,0,0.4)', dash='dash')))
 
-        fig.update_layout(autosize=False, height=400, xaxis_title = "Date", yaxis_title = "CHF", title="1 Week Target Price")
-        fig.update_yaxes(range=[min(data.values)*0.9, max(data.values)*1.1])
+        fig.update_layout(autosize=True, height=400, xaxis_title = "Date", yaxis_title = "CHF", title="1 Week Target Price")
         st.plotly_chart(fig, use_container_width=True)
         
         if st.checkbox("Show News"):
