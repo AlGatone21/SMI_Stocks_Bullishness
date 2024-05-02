@@ -188,8 +188,8 @@ def app():
         try:
             st.write(f"Getting news for company: {company}")
             news = get_stock_news(company)
-            st.write(news)
             news_analyzed = analyze_news_sentiment(news)
+            st.write(news_analyzed)
         except Exception as e:
             st.write(f"An error occurred: {e}")
             news = "No news data available"
