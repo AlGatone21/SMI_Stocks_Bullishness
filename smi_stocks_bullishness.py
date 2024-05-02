@@ -54,11 +54,14 @@ def get_stock_series(ticker):
 
 # load the stock news from Google News
 @st.cache_data()
-def get_stock_news(company):
+def get_stock_news():
 
     # Get the news data from Google News
-    google_news = GNews(max_results=10)
-    df = google_news.get_news(company)
+    df = []
+    for source in ["nzz.ch/wirtschaft", "finews.ch"]:
+        google_news = GNews(max_results=10)
+        response = GNews.get_news_by_site(google_news, site =source)
+        df.append(response)
 
     # get the url
     url_data = []
@@ -186,8 +189,7 @@ def app():
     with col2:
         # create a gauge plot with the bullishness sentiment
         try:
-            st.write(f"Getting news for company: {company}")
-            news = get_stock_news(company)
+            news = get_stock_news()
             news_analyzed = analyze_news_sentiment(news)
             st.write(news_analyzed)
         except Exception as e:
@@ -202,7 +204,7 @@ def app():
             domain={'x': [0, 1], 'y': [0, 1]},
             gauge={'axis': {'range': [-100, 100]}},
             ))
-        fig.update_layout(title="Current Bullishness Index")
+        fig.update_layout(title="Current SMI Bullishness Index")
         st.plotly_chart(fig, use_container_width=True)
 
 if __name__ == '__main__':
