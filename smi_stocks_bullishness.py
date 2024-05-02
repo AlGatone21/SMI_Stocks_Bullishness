@@ -119,7 +119,7 @@ def analyze_news_sentiment(news):
     sentiment_data = []
     for article in news["Text"]:
         try:
-            sentiment = pipe(article)[0]["label"]
+            sentiment = pipe(article)["label"]
             sentiment_data.append(sentiment)
         except:
             sentiment_data.append("not_found")
