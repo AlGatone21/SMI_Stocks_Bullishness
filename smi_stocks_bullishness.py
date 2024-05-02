@@ -18,8 +18,10 @@ import matplotlib.colors as mcolors
 
 
 ############################################################################################################
-# Functions defnitons                                                                                      
+# Functions defnitons                                                                                      #
 ############################################################################################################
+
+# load the current stock price from Yahoo Finance
 @st.cache_data()
 def get_stock_current_price(ticker):
     try:
@@ -28,6 +30,8 @@ def get_stock_current_price(ticker):
         return round(data['Close'][0], 2)
     except:
         return "data not available"
+
+# load the stock returns from Yahoo Finance
 @st.cache_data()
 def get_stock_returns(ticker):
     try:
@@ -36,6 +40,8 @@ def get_stock_returns(ticker):
         return round(data['Close'][-1] - data['Open'][0], 2)
     except:
         return "data not available"
+
+# load the stock series from Yahoo Finance
 @st.cache_data()
 def get_stock_series(ticker):
     try:
@@ -45,19 +51,25 @@ def get_stock_series(ticker):
     except:
         return "data not available"
 
+# load the stock news from Google News
 @st.cache_data()
-def get_stock_news(com):
+def get_stock_news(company):
+
+    # Get the news data from Google News
     google_news = GNews(period="7d", max_results=10)
     df = google_news.get_news(company)
 
+    # get the url
     url_data = []
     for i in range(0,len(df)):
         url_data.append(df[i]["url"])
-        
+
+    # get the title   
     title_data = []
     for i in range(0,len(df)):
         title_data.append(df[i]["title"])
-        
+
+    # Convert the published date to a datetime object    
     published_date_data = []
     for i in range(0,len(df)):
         date_string = df[i]["published date"]
@@ -68,10 +80,12 @@ def get_stock_news(com):
         date_object = datetime.strptime(new_date, new_date_format)
         published_date_data.append(date_object)
 
+    # get the publisher
     publisher_data = []
     for i in range(0,len(df)):
         publisher_data.append(df[i]["publisher"]["title"])
 
+    # Create a dataframe with the news data
     df = pd.DataFrame({"Title": title_data, "URL" : url_data, "Date" : published_date_data, "Publisher" : publisher_data})
 
     global progress_bar
