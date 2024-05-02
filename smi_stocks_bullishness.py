@@ -203,7 +203,7 @@ def app():
         fig.update_layout(title="Current Bullishness Index")
         st.plotly_chart(fig, use_container_width=True)
 
-#st.write("the total number of articles is", len(news_analyzed))
+st.write(news)
 
 if __name__ == '__main__':
     app()
