@@ -12,6 +12,7 @@ from newspaper import Article
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 import torch
 import plotly.graph_objects as go
+import matplotlib.colors as mcolors
 
 
 
@@ -196,6 +197,8 @@ def app():
 
         returns = get_stock_returns(ticker)
         color = "green" if returns >= 0 else "red"
+        rgb = mcolors.to_rgb(color)  # Convert the color name to RGB values
+        red, green, blue = [int(255 * x) for x in rgb]  # Scale the RGB values to the range 0-255
         st.markdown(f"The returns of {ticker} in the last 30 days is <span style='color: {color}; font-weight: bold;'>{returns}%</span>", unsafe_allow_html=True)
 
     col1, col2 = st.columns([1,1])
@@ -204,7 +207,7 @@ def app():
 
         # Create a plot of the stock development
 # Create a plot of the stock development
-        fig = go.Figure(data=go.Scatter(x=data.index, y=data.values, fill='tozeroy', fillcolor=f'rgba({color},0.05)', line=dict(color=color)))
+        fig = go.Figure(data=go.Scatter(x=data.index, y=data.values, fill='tozeroy', fillcolor=f'rgba({red},{green},{blue},0.05)', line=dict(color=color)))
         fig.update_layout(autosize=False, height=400, xaxis_title = "Date", yaxis_title = "USD", title="1 Month Stock Development")  # Change this to your desired height
         fig.update_yaxes(range=[min(data.values)*0.9, max(data.values)*1.1])  # Adjust y-axis to the values of the series
         st.plotly_chart(fig, use_container_width=True)
