@@ -207,7 +207,7 @@ def bullishness(news_analyzed):
 
 # Load the model
 
-model = pickle.load(open("linear_model.sav", "rb"))
+#model = pickle.load(open("linear_model.sav", "rb"))
 
 
 @st.cache_data()
@@ -226,6 +226,9 @@ def app():
         st.session_state['accepted_disclaimer'] = False
 
     if not st.session_state['accepted_disclaimer']:
+        import os
+    cwd = os.getcwd()
+    st.write("Current working directory:", cwd)
         # Disclaimer page
         col1, col2 = st.columns([1,3])
         with col1:
