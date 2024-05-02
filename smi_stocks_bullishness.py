@@ -254,9 +254,6 @@ def app():
             st.write("## Recent News")
 
             for index, row in news.iterrows():
-                st.write(f"### {row['Title']}")
-                st.write(f"Published on {row['Date']} by {row['Publisher']}")
-                st.write(f"URL: {row['URL']}")
                 st.markdown(row['Description'], unsafe_allow_html=True)
                 st.write("---")
 
