@@ -301,6 +301,11 @@ def app():
         upper_limit = prediction + rmse
         lower_limit = prediction - rmse
 
+        # Update the series with the 1 week target price
+        target_date = datetime.today() + timedelta(days=7)
+        data.loc[target_date] = prediction
+        
+
         # Create a plot of the updated stock development
         fig = go.Figure()
 
