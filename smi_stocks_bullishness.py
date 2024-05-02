@@ -108,7 +108,7 @@ def get_stock_news(company):
 @st.cache_data()
 def analyze_news_sentiment(news):
 
-    pipe = pipeline("text-classification",model="ProsusAI/finbert")
+    pipe = pipeline("text-classification", model="scherrmann/GermanFinBert_SC_Sentiment")
 
     # Analyze the sentiment of each news article
     sentiment_data = []
