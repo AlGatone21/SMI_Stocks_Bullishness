@@ -7,13 +7,14 @@ import yfinance as yf
 from gnews import GNews
 from tqdm import tqdm
 import pandas as pd
-from datetime import datetime
+from datetime import datetime, timedelta
 from newspaper import Article
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 from transformers import pipeline
 import torch
 import plotly.graph_objects as go
 import matplotlib.colors as mcolors
+import requests
 
 
 
@@ -21,6 +22,28 @@ import matplotlib.colors as mcolors
 ############################################################################################################
 # Functions defnitons                                                                                      #
 ############################################################################################################
+
+def search_news(source, start_date, end_date, max_items=100):
+    url = f"https://news.google.com/rss/search?q=source:{source}%20after:{start_date}%20before:{end_date}"
+    response = requests.get(url)
+    
+    # Parse the XML response
+    root = etree.fromstring(response.content)
+
+    # Extract the relevant data
+    data = []
+    for i, item in enumerate(root.findall(".//item")):
+        if i >= max_items:
+            break
+        data.append({
+            "title": item.find("title").text,
+            "link": item.find("link").text,
+            "pubDate": item.find("pubDate").text,
+            "source": item.find("source").text
+        })
+
+    # Convert the data into a DataFrame
+    df = pd.DataFrame(data)
 
 # load the current stock price from Yahoo Finance
 @st.cache_data()
@@ -56,11 +79,18 @@ def get_stock_series(ticker):
 @st.cache_data()
 def get_stock_news():
 
+    # Get today's date
+    today = datetime.today()
+    # Calculate the date seven days ago
+    seven_days_ago = today - timedelta(days=7)
+    # Format the dates as strings
+    today_str = today.strftime("%Y-%m-%d")
+    seven_days_ago_str = seven_days_ago.strftime("%Y-%m-%d")
+
     # Get the news data from Google News
     df = []
     for source in ["nzz.ch/wirtschaft", "finews.ch"]:
-        google_news = GNews(max_results=10)
-        response = GNews.get_news_by_site(google_news, site = source)
+        response = search_news(source, seven_days_ago_str, today_str, max_items=10)
         for i in response:
             df.append(i)
 
