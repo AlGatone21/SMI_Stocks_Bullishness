@@ -337,6 +337,11 @@ def app():
 
         fig.update_layout(autosize=True, height=400, xaxis_title = "Date", yaxis_title = "CHF", title="1 Week Target Price")
         st.plotly_chart(fig, use_container_width=True)
+
+        if st.checkbox("Show Model Details"):
+            st.write("## Model Summary")
+            st.write(model.summary())
+
         
         if st.checkbox("Show News"):
             st.write("## Recent News")
