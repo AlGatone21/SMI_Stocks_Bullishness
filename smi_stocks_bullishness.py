@@ -169,13 +169,15 @@ def bullishness(news_analyzed):
     return bullishness
 
 
-smi = pd.read_excel("SMI.xlsx") # Load the SMI Companies
+
 
 ############################################################################################################
 # Streamlit App
 ###########################################################################################################
 
 def app():
+    smi = pd.read_excel("SMI.xlsx") # Load the SMI Companies
+    
     st.set_page_config(page_title="SMI Stocks Bullishness Index", page_icon="📈", layout="wide")
 
     col1, col2 = st.columns([1,3])
