@@ -304,7 +304,8 @@ def app():
         st.markdown(f"The predicted 1 week stock price for {ticker} is {round(prediction, 2)} CHF, which implies a predicted 1 week return of  <span style='color: {color3}; font-weight: bold;'>{return1w}%</span>", unsafe_allow_html=True)
 
         # Calculate the upper and lower confidence interval boundaries
-        alpha = 100 - st.select_slider("Select the confidence level (%)", options=range(1,100))
+        confidence = st.select_slider("Select the confidence level (%)", options=range(1,100))
+        alpha = 1 - confidence / 100
         upper_limit = predict_upper_limit(open_price, sentiment, volume, volatility, alpha)
         lower_limit = predict_lower_limit(open_price, sentiment, volume, volatility, alpha)
 
