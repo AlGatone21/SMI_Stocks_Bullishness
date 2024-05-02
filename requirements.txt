@@ -8,3 +8,4 @@ newspaper3k
 transformers
 torch
 plotly
+python-dotenv
