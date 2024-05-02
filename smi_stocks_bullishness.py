@@ -246,11 +246,11 @@ def app():
         
         if st.checkbox("Show News"):
             st.write("## Recent News")
-
-            # Loop over the items in the news DataFrame
-            for article in range(0, len(news_analyzed)):
-                # Display the title and link of each item
-                st.write(f"[{news_analyzed[article]['title']}]({news_analyzed[article]['url']})")
+            for index, row in news.iterrows():
+                st.write(f"### {row['Title']}")
+                st.write(f"Published on {row['Date']} by {row['Publisher']}")
+                st.write(f"URL: {row['URL']}")
+                st.write("---")
 
 if __name__ == '__main__':
     app()
