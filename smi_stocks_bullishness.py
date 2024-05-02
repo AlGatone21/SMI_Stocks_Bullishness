@@ -62,7 +62,7 @@ def get_stock_current_price(ticker):
 def get_stock_returns(ticker):
     try:
         stock = yf.Ticker(ticker)
-        data = stock.history(period="1mo")
+        data = stock.history(period="7d")
         return round(data['Close'][-1] - data['Open'][0], 2)
     except:
         return "data not available"
@@ -72,8 +72,26 @@ def get_stock_returns(ticker):
 def get_stock_series(ticker):
     try:
         stock = yf.Ticker(ticker)
-        data = stock.history(period="1mo")
+        data = stock.history(period="7d")
         return data['Close']
+    except:
+        return "data not available"
+
+# load the stock volume from Yahoo Finance
+@st.cache_data()
+def get_stock_volume(ticker):
+    try:
+        stock = yf.Ticker(ticker)
+        data = stock.history(period="7d")
+        return sum(data['Volume'])
+
+# load the stock volatility from Yahoo Finance
+@st.cache_data()
+def get_stock_volatility(ticker):
+    try:
+        stock = yf.Ticker(ticker)
+        data = stock.history(period="7d")
+        return round(data['High'].std(), 2)
     except:
         return "data not available"
 
@@ -225,7 +243,7 @@ def app():
             color = "green" if returns >= 0 else "red"
             rgb = mcolors.to_rgb(color)  # Convert the color name to RGB values
             red, green, blue = [int(255 * x) for x in rgb]  # Scale the RGB values to the range 0-255
-            st.markdown(f"The return of {ticker} in the last 30 days is <span style='color: {color}; font-weight: bold;'>{returns}%</span>", unsafe_allow_html=True)
+            st.markdown(f"The return of {ticker} for the last week is <span style='color: {color}; font-weight: bold;'>{returns}%</span>", unsafe_allow_html=True)
 
         col1, col2 = st.columns([1,1])
         with col1.container():
