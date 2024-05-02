@@ -84,6 +84,8 @@ def get_stock_volume(ticker):
         stock = yf.Ticker(ticker)
         data = stock.history(period="7d")
         return sum(data['Volume'])
+    except:
+        return "data not available"
 
 # load the stock volatility from Yahoo Finance
 @st.cache_data()
