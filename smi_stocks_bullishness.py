@@ -41,7 +41,8 @@ def search_news(source, start_date, end_date, max_items=100):
             "title": item.find("title").text,
             "link": item.find("link").text,
             "pubDate": item.find("pubDate").text,
-            "source": item.find("source").text
+            "source": item.find("source").text,
+            "image": item.find("image").text if item.find("image") is not None else ""
         })
 
     return data
@@ -121,8 +122,13 @@ def get_stock_news():
     for i in range(0,len(df)):
         publisher_data.append(df[i]["source"])
 
+    # get the image link
+    image_data = []
+    for i in range(0,len(df)):
+        image_data.append(df[i]["image"])
+
     # Create a dataframe with the news data
-    df = pd.DataFrame({"Title": title_data, "URL" : url_data, "Date" : published_date_data, "Publisher" : publisher_data})
+    df = pd.DataFrame({"Title": title_data, "URL" : url_data, "Date" : published_date_data, "Publisher" : publisher_data, "Image" : image_data})
 
     text_list = []
     for i in range(0, len(df)):
@@ -246,11 +252,16 @@ def app():
         
         if st.checkbox("Show News"):
             st.write("## Recent News")
+
             for index, row in news.iterrows():
-                st.write(f"### {row['Title']}")
-                st.write(f"Published on {row['Date']} by {row['Publisher']}")
-                st.write(f"URL: {row['URL']}")
-                st.write("---")
+                with col1:
+                    st.image(row['Image'])
+
+                with col2:
+                    st.write(f"### {row['Title']}")
+                    st.write(f"Published on {row['Date']} by {row['Publisher']}")
+                    st.write(f"URL: {row['URL']}")
+                    st.write("---")
 
 if __name__ == '__main__':
     app()
