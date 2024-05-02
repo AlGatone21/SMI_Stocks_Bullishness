@@ -162,7 +162,10 @@ def bullishness(news_analyzed):
         else:
             neutral += 1
 
-    bullishness = round((positive - negative) / (positive + negative + neutral) *100, 2)
+    try:
+        bullishness = round((positive - negative) / (positive + negative + neutral) *100, 2)
+    except:
+        bullishness = 0
     return bullishness
 
 
