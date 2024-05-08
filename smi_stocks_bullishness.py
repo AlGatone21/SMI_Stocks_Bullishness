@@ -218,12 +218,12 @@ def predict_stock_price(open, sentiment, volume, volatility, returnt1):
 
 def predict_lower_limit(open, sentiment, volume, volatility, returnt1, alpha = 0.05):
     volume = np.log(volume)
-    returns =  model.conf_int(alpha)[0]["const"] + model.conf_int(alpha)[0]["Sentiment_Score_t1"] * sentiment + model.conf_int(alpha)[0]["log_Volume_t1"] * volume + model.conf_int(alpha)[0]["Volatility_t1"] * volatility + model.conf_int(alpha)[0]["Returns_t1"] * returnt1
+    returns =  model.conf_int(alpha)[0]["const"] + model.conf_int(alpha)[0]["Sentiment_Score_t1"] * sentiment + model.conf_int(alpha)[0]["log_Volume_t1"] * volume + model.conf_int(alpha)[0]["Volatility_t1"] * volatility + model.conf_int(alpha)[0]["Return_t1"] * returnt1
     return open * (1 + returns)
 
 def predict_upper_limit(open, sentiment, volume, volatility, returnt1, alpha = 0.05):
     volume = np.log(volume)
-    returns =  model.conf_int(alpha)[1]["const"] + model.conf_int(alpha)[1]["Sentiment_Score_t1"] * sentiment + model.conf_int(alpha)[1]["log_Volume_t1"] * volume + model.conf_int(alpha)[1]["Volatility_t1"] * volatility + model.conf_int(alpha)[1]["Returns_t1"] * returnt1
+    returns =  model.conf_int(alpha)[1]["const"] + model.conf_int(alpha)[1]["Sentiment_Score_t1"] * sentiment + model.conf_int(alpha)[1]["log_Volume_t1"] * volume + model.conf_int(alpha)[1]["Volatility_t1"] * volatility + model.conf_int(alpha)[1]["Return_t1"] * returnt1
     return open * (1 + returns)
 
 smi = pd.read_excel("SMI.xlsx") # Load the SMI Companies
