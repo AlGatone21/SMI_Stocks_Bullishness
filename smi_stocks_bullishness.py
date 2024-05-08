@@ -206,20 +206,23 @@ def bullishness(news_analyzed):
     return bullishness
 
 # Load the model
-model = load_pickle('linear_reg_model.pickle')
+model = load_pickle('linear_regr_model.pickle')
 
 
-def predict_stock_price(open, sentiment, volume, volatility):
-    returns = model.predict([[1, sentiment, volume, volatility]])[0]
+def predict_stock_price(open, sentiment, volume, volatility, returnt1):
+    volume = log(volume)
+    returns = model.predict([[1, sentiment, volume, volatility, returnt1]])[0]
     return open * (1 + returns)
 
 
-def predict_lower_limit(open, sentiment, volume, volatility, alpha = 0.05):
-    returns =  model.conf_int(alpha)[0]["const"] + model.conf_int(alpha)[0]["Sentiment_Score_t1"] * sentiment + model.conf_int(alpha)[0]["Volume_t1"] * volume + model.conf_int(alpha)[0]["Volatility_t1"] * volatility
+def predict_lower_limit(open, sentiment, volume, volatility, returnt1, alpha = 0.05):
+    volume = log(volume)
+    returns =  model.conf_int(alpha)[0]["const"] + model.conf_int(alpha)[0]["Sentiment_Score_t1"] * sentiment + model.conf_int(alpha)[0]["Volume_t1"] * volume + model.conf_int(alpha)[0]["Volatility_t1"] * volatility + model.conf_int(alpha)[0]["Returns_t1"] * returnt1
     return open * (1 + returns)
 
-def predict_upper_limit(open, sentiment, volume, volatility, alpha = 0.05):
-    returns =  model.conf_int(alpha)[1]["const"] + model.conf_int(alpha)[1]["Sentiment_Score_t1"] * sentiment + model.conf_int(alpha)[1]["Volume_t1"] * volume + model.conf_int(alpha)[1]["Volatility_t1"] * volatility
+def predict_upper_limit(open, sentiment, volume, volatility, returnt1, alpha = 0.05):
+    volume = log(volume)
+    returns =  model.conf_int(alpha)[1]["const"] + model.conf_int(alpha)[1]["Sentiment_Score_t1"] * sentiment + model.conf_int(alpha)[1]["Volume_t1"] * volume + model.conf_int(alpha)[1]["Volatility_t1"] * volatility + model.conf_int(alpha)[1]["Returns_t1"] * returnt1
     return open * (1 + returns)
 
 smi = pd.read_excel("SMI.xlsx") # Load the SMI Companies
@@ -297,8 +300,9 @@ def app():
         volume = get_stock_volume(ticker)
         volatility = get_stock_volatility(ticker)
         sentiment = bullishness_sentiment/100
+        returnt1 = returns
 
-        prediction = predict_stock_price(open_price, sentiment, volume, volatility)
+        prediction = predict_stock_price(open_price, sentiment, volume, volatility, returnt1)
         return1w = round((prediction - open_price) / open_price * 100, 2)
         color3 = "green" if return1w >= 0 else "red"
         rgb3 = mcolors.to_rgb(color3)  # Convert the color name to RGB values
@@ -308,11 +312,11 @@ def app():
         # Calculate the upper and lower confidence interval boundaries
         confidence = st.select_slider("Select the confidence level (%)", options=range(1,100))
         alpha = 1 - confidence / 100
-        upper_limit = predict_upper_limit(open_price, sentiment, volume, volatility, alpha)
-        lower_limit = predict_lower_limit(open_price, sentiment, volume, volatility, alpha)
+        upper_limit = predict_upper_limit(open_price, sentiment, volume, volatility, returnt1, alpha)
+        lower_limit = predict_lower_limit(open_price, sentiment, volume, volatility, returnt1, alpha)
 
-        max_upper_limit = predict_upper_limit(open_price, sentiment, volume, volatility, 0.01)
-        min_lower_limit = predict_lower_limit(open_price, sentiment, volume, volatility, 0.01)
+        max_upper_limit = predict_upper_limit(open_price, sentiment, volume, volatility, returnt1, 0.01)
+        min_lower_limit = predict_lower_limit(open_price, sentiment, volume, volatility, returnt1, 0.01)
 
         prediction_volatility = round(((max_upper_limit - min_lower_limit) / prediction) * 100, 2)
         
