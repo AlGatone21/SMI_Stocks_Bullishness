@@ -303,7 +303,7 @@ def app():
         sentiment = bullishness_sentiment/100
         returnt1 = returns
 
-        prediction = predict_stock_price(open_price, sentiment, volume, volatility, returnt1)
+        prediction = max(predict_stock_price(open_price, sentiment, volume, volatility, returnt1),0)
         return1w = round((prediction - open_price) / open_price * 100, 2)
         color3 = "green" if return1w >= 0 else "red"
         rgb3 = mcolors.to_rgb(color3)  # Convert the color name to RGB values
@@ -313,11 +313,11 @@ def app():
         # Calculate the upper and lower confidence interval boundaries
         confidence = st.select_slider("Select the confidence level (%)", options=range(1,100))
         alpha = 1 - confidence / 100
-        upper_limit = predict_upper_limit(open_price, sentiment, volume, volatility, returnt1, alpha)
-        lower_limit = predict_lower_limit(open_price, sentiment, volume, volatility, returnt1, alpha)
+        upper_limit = max(predict_upper_limit(open_price, sentiment, volume, volatility, returnt1, alpha),0)
+        lower_limit = max(predict_lower_limit(open_price, sentiment, volume, volatility, returnt1, alpha), 0)
 
-        max_upper_limit = predict_upper_limit(open_price, sentiment, volume, volatility, returnt1, 0.01)
-        min_lower_limit = predict_lower_limit(open_price, sentiment, volume, volatility, returnt1, 0.01)
+        max_upper_limit = max(predict_upper_limit(open_price, sentiment, volume, volatility, returnt1, 0.01),0)
+        min_lower_limit = max(predict_lower_limit(open_price, sentiment, volume, volatility, returnt1, 0.01),0)
 
         prediction_volatility = round(((max_upper_limit - min_lower_limit) / prediction) * 100, 2)
         
