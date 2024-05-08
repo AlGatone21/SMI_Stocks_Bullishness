@@ -7,6 +7,7 @@ import yfinance as yf
 from gnews import GNews
 from tqdm import tqdm
 import pandas as pd
+import numpy as np
 from datetime import datetime, timedelta
 from newspaper import Article
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
@@ -210,18 +211,18 @@ model = load_pickle('linear_regr_model.pickle')
 
 
 def predict_stock_price(open, sentiment, volume, volatility, returnt1):
-    volume = log(volume)
+    volume = np.log(volume)
     returns = model.predict([[1, sentiment, volume, volatility, returnt1]])[0]
     return open * (1 + returns)
 
 
 def predict_lower_limit(open, sentiment, volume, volatility, returnt1, alpha = 0.05):
-    volume = log(volume)
+    volume = np.log(volume)
     returns =  model.conf_int(alpha)[0]["const"] + model.conf_int(alpha)[0]["Sentiment_Score_t1"] * sentiment + model.conf_int(alpha)[0]["Volume_t1"] * volume + model.conf_int(alpha)[0]["Volatility_t1"] * volatility + model.conf_int(alpha)[0]["Returns_t1"] * returnt1
     return open * (1 + returns)
 
 def predict_upper_limit(open, sentiment, volume, volatility, returnt1, alpha = 0.05):
-    volume = log(volume)
+    volume = np.log(volume)
     returns =  model.conf_int(alpha)[1]["const"] + model.conf_int(alpha)[1]["Sentiment_Score_t1"] * sentiment + model.conf_int(alpha)[1]["Volume_t1"] * volume + model.conf_int(alpha)[1]["Volatility_t1"] * volatility + model.conf_int(alpha)[1]["Returns_t1"] * returnt1
     return open * (1 + returns)
 
