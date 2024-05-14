@@ -234,7 +234,7 @@ def predict_upper_limit(open, sentiment, volume, volatility, returnt1, alpha = 0
 def predict_return_knn(sentiment, volume, volatility, returnt1):
     volume = np.log(volume)
     # Create a DataFrame with the input data
-    input_data = pd.DataFrame([[sentiment, volume, volatility, returnt1]], columns=["Sentiment_Score_t1", "log_Volume_t1", "Volatility_t1", "Return_t1"])
+    input_data = pd.DataFrame([[0.5, 10.5, 0.5, 0.5]], columns=["Sentiment_Score_t1", "log_Volume_t1", "Volatility_t1", "Return_t1"])
     # Make a prediction with the KNN model
     label = knn_model.predict(input_data)[0]
 
