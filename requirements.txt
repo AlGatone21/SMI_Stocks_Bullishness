@@ -20,4 +20,4 @@ feedparser
 requests
 statsmodels
 scikit-learn
-joblib
+pickle
