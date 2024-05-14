@@ -373,6 +373,10 @@ def app():
         fig.update_yaxes(range=[min(data_lower.values)*0.9, max(data_upper.values)*1.1])
         st.plotly_chart(fig, use_container_width=True)
 
+        st.write("## KNN Model Prediction")
+        prediction_knn = predict_return_knn(sentiment, volume, volatility, returnt1)
+        st.write(f"The KNN model predicts a {prediction_knn} recommendation for {ticker}.")
+
 
         st.write("## Appendix")
         if st.checkbox("Show Model Details"):
