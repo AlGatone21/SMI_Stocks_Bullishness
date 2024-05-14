@@ -234,7 +234,7 @@ def predict_upper_limit(open, sentiment, volume, volatility, returnt1, alpha = 0
 def predict_return_knn(sentiment, volume, volatility, returnt1):
     volume = np.log(volume)
     # Create a DataFrame with the input data
-    input_data = pd.DataFrame([[0.5, 10.5, 0.5, 0.5]], columns=["Sentiment_Score_t1", "log_Volume_t1", "Volatility_t1", "Return_t1"])
+    input_data = pd.DataFrame([[sentiment, volume, volatility, returnt1]], columns=["Sentiment_Score_t1", "log_Volume_t1", "Volatility_t1", "Return_t1"])
     # Make a prediction with the KNN model
     label = knn_model.predict(input_data)[0]
 
@@ -376,9 +376,9 @@ def app():
         st.plotly_chart(fig, use_container_width=True)
 
         st.write("## Prediction with KNN Model")
-        prediction_knn = predict_return_knn(0.5, 10.5, 0.5, 0.5)
-        st.write(f"The predicted 1 week stock return for {ticker} with the KNN model is {prediction_knn}")
-
+        #prediction_knn = predict_return_knn(sentiment, volume, volatility, returnt1)
+        #st.write(f"The predicted 1 week stock return for {ticker} with the KNN model is {prediction_knn}")
+        st.write(knn_model)
 
         st.write("## Appendix")
         if st.checkbox("Show Model Details"):
