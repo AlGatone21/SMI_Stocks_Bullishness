@@ -224,9 +224,6 @@ log_reg = pickle.load(open("xgboost.sav", 'rb'))
 # Load the Naive Bayes Model
 log_reg = pickle.load(open("naive_bayes.sav", 'rb'))
 
-# Load the Random Forest Model
-log_reg = pickle.load(open(".sav", 'rb'))
-
 # Load the Decision Tree Model
 log_reg = pickle.load(open(".sav", 'rb'))
 
