@@ -20,6 +20,7 @@ from lxml import etree
 import feedparser
 import pickle
 from statsmodels.iolib.smpickle import load_pickle
+from joblib import dump, load
 
 
 
@@ -210,8 +211,7 @@ def bullishness(news_analyzed):
 model = load_pickle('linear_regr_model.pickle')
 
 #load the knn model
-with open('AlGatone21/SMI_Stocks_Bullishness/knn_model.pickle', 'rb') as f:
-    knn_model = pickle.load(f)
+knn_model = load('knn.joblib')
 
 
 def predict_stock_price(open, sentiment, volume, volatility, returnt1):
