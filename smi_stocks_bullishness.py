@@ -386,13 +386,13 @@ def app():
         with col1:
             st.markdown(f"""KNN: <span style='color: {"red" if prediction_knn == "SELL" else "green" if prediction_knn == "BUY" else "black"};font-weight: bold;;'>{prediction_knn}</span>""", unsafe_allow_html=True)
         with col2:
-            st.write(f"Logistic Regression: {prediction_log_reg}")
+            st.markdown(f"""Logistic Regression: <span style='color: {"red" if prediction_log_reg == "SELL" else "green" if prediction_log_reg == "BUY" else "black"};font-weight: bold;;'>{prediction_log_reg}</span>""", unsafe_allow_html=True)
         with col3:
-            st.write(f"SVC: {prediction_svc}")
+            st.markdown(f"""SVC: <span style='color: {"red" if prediction_svc == "SELL" else "green" if prediction_svc == "BUY" else "black"};font-weight: bold;;'>{prediction_svc}</span>""", unsafe_allow_html=True)
         with col4:
-            st.write(f"Naive Bayes: {prediction_naive_bayes}")
+            st.markdown(f"""Naive Bayes: <span style='color: {"red" if prediction_naive_bayes == "SELL" else "green" if prediction_naive_bayes == "BUY" else "black"};font-weight: bold;;'>{prediction_naive_bayes}</span>""", unsafe_allow_html=True)
         with col5:
-            st.write(f"Decision Tree: {prediction_dt}")
+            st.markdown(f"""Decision Tree: <span style='color: {"red" if prediction_dt == "SELL" else "green" if prediction_dt == "BUY" else "black"};font-weight: bold;;'>{prediction_dt}</span>""", unsafe_allow_html=True)
 
 
 
