@@ -387,7 +387,16 @@ def app():
 
         st.write("## Machine Learning Classifiers Prediction")
         prediction_knn = predict_return_knn(sentiment, volume, volatility, returnt1)
+        prediction_log_reg = log_reg.predict([[sentiment, volume, volatility, returnt1]])[0]
+        prediction_svc = svc.predict([[sentiment, volume, volatility, returnt1]])[0]
+        prediction_naive_bayes = naive_bayes.predict([[sentiment, volume, volatility, returnt1]])[0]
+        prediction_dt = dt.predict([[sentiment, volume, volatility, returnt1]])[0]
         st.write(f"The KNN model predicts a {prediction_knn} recommendation for {ticker}.")
+        st.write(f"The Logistic Regression model predicts a {prediction_log_reg} recommendation for {ticker}.")
+        st.write(f"The SVC model predicts a {prediction_svc} recommendation for {ticker}.")
+        st.write(f"The Naive Bayes model predicts a {prediction_naive_bayes} recommendation for {ticker}.")
+        st.write(f"The Decision Tree model predicts a {prediction_dt} recommendation for {ticker}.")
+        
         
 
         st.write("## Appendix")
