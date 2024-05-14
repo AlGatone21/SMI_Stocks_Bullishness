@@ -381,20 +381,20 @@ def app():
         prediction_naive_bayes = "SELL" if prediction_naive_bayes == 2 else "BUY" if prediction_naive_bayes == 1 else "HOLD"
         prediction_dt = "SELL" if prediction_dt == 2 else "BUY" if prediction_dt == 1 else "HOLD"
         
-        col1, col2, col3, col4, col5 = st.columns(5)
+    
+        models = ['KNN', 'Logistic Regression', 'SVC', 'Naive Bayes', 'Decision Tree']
         
-        with col1:
-            st.markdown(f"""KNN: <span style='color: {"red" if prediction_knn == "SELL" else "green" if prediction_knn == "BUY" else "black"};font-weight: bold;;'>{prediction_knn}</span>""", unsafe_allow_html=True)
-        with col2:
-            st.markdown(f"""Logistic Regression: <span style='color: {"red" if prediction_log_reg == "SELL" else "green" if prediction_log_reg == "BUY" else "black"};font-weight: bold;;'>{prediction_log_reg}</span>""", unsafe_allow_html=True)
-        with col3:
-            st.markdown(f"""SVC: <span style='color: {"red" if prediction_svc == "SELL" else "green" if prediction_svc == "BUY" else "black"};font-weight: bold;;'>{prediction_svc}</span>""", unsafe_allow_html=True)
-        with col4:
-            st.markdown(f"""Naive Bayes: <span style='color: {"red" if prediction_naive_bayes == "SELL" else "green" if prediction_naive_bayes == "BUY" else "black"};font-weight: bold;;'>{prediction_naive_bayes}</span>""", unsafe_allow_html=True)
-        with col5:
-            st.markdown(f"""Decision Tree: <span style='color: {"red" if prediction_dt == "SELL" else "green" if prediction_dt == "BUY" else "black"};font-weight: bold;;'>{prediction_dt}</span>""", unsafe_allow_html=True)
-
-
+        predictions = {
+            'KNN': prediction_knn,
+            'Logistic Regression': prediction_log_reg,
+            'SVC': prediction_svc,
+            'Naive Bayes': prediction_naive_bayes,
+            'Decision Tree': prediction_dt
+        }
+        selected_model = st.selectbox('Select a model:', models)
+        
+        # Display the prediction for the selected model
+        st.markdown(f"""{selected_model}: <span style='color: {"red" if predictions[selected_model] == "SELL" else "green" if predictions[selected_model] == "BUY" else "black"};font-weight: bold;;'>{predictions[selected_model]}</span>""", unsafe_allow_html=True)
 
         st.write("## Appendix")
         if st.checkbox("Show Model Details"):
