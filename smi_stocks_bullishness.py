@@ -78,7 +78,7 @@ def get_stock_returns(ticker):
     try:
         data = get_stock_series(ticker)
         returns = (data[-1] - data[0]) / data[0]
-        return round(returns * 100, 2)
+        return returns
     except:
         return "data not available"
 
