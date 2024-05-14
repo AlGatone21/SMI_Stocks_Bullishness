@@ -20,4 +20,3 @@ feedparser
 requests
 statsmodels
 scikit-learn
-pickle5
