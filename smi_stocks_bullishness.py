@@ -383,10 +383,10 @@ def app():
 
         st.write("## Machine Learning Classifiers Prediction")
         prediction_knn = knn_model.predict([[sentiment, np.log(volume), volatility, returnt1]])[0]
-        prediction_log_reg = log_reg.predict([[sentiment, volume, volatility, returnt1]])[0]
+        prediction_log_reg = log_reg.predict([[sentiment, np.log(volume), volatility, returnt1]])[0]
         prediction_svc = svc.predict([[sentiment, volume, volatility, returnt1]])[0]
-        prediction_naive_bayes = naive_bayes.predict([[sentiment, volume, volatility, returnt1]])[0]
-        prediction_dt = dt.predict([[sentiment, volume, volatility, returnt1]])[0]
+        prediction_naive_bayes = naive_bayes.predict([[sentiment, np.log(volume), volatility, returnt1]])[0]
+        prediction_dt = dt.predict([[sentiment, np.log(volume), volatility, returnt1]])[0]
         prediction_knn = "SELL" if prediction_knn == 2 else "BUY" if prediction_knn == 1 else "HOLD"
         prediction_log_reg = "SELL" if prediction_log_reg == 2 else "BUY" if prediction_log_reg == 1 else "HOLD"
         prediction_svc = "SELL" if prediction_svc == 2 else "BUY" if prediction_svc == 1 else "HOLD"
