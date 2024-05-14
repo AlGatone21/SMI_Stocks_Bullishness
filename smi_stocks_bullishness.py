@@ -384,7 +384,7 @@ def app():
         col1, col2, col3, col4, col5 = st.columns(5)
         
         with col1:
-            st.write(f"KNN: {prediction_knn}")
+            st.write(f"KNN: {prediction_knn}", color="red" if prediction_knn == "SELL" else "green" if prediction_knn == "BUY" else "black")
         with col2:
             st.write(f"Logistic Regression: {prediction_log_reg}")
         with col3:
