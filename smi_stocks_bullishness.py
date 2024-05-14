@@ -331,11 +331,11 @@ def app():
         returnt1 = returns
 
         prediction = max(predict_stock_price(open_price, sentiment, volume, volatility, returnt1),0)
-        return1w = round((prediction - open_price) / open_price * 100, 2)
+        return1w = (prediction - open_price) / open_price
         color3 = "green" if return1w >= 0 else "red"
         rgb3 = mcolors.to_rgb(color3)  # Convert the color name to RGB values
         red3, green3, blue3 = [int(255 * x) for x in rgb3]  # Scale the RGB values to the range 0-255        
-        st.markdown(f"The predicted 1 week stock price for {ticker} is {round(prediction, 2)} CHF, which implies a predicted 1 week return of  <span style='color: {color3}; font-weight: bold;'>{return1w}%</span>", unsafe_allow_html=True)
+        st.markdown(f"The predicted 1 week stock price for {ticker} is {round(prediction, 2)} CHF, which implies a predicted 1 week return of  <span style='color: {color3}; font-weight: bold;'>{round(return1w*100,2)}%</span>", unsafe_allow_html=True)
 
         # Calculate the upper and lower confidence interval boundaries
         confidence = st.select_slider("Select the confidence level (%)", options=range(1,100))
