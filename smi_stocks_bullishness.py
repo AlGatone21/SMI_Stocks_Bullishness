@@ -380,12 +380,20 @@ def app():
         prediction_svc = "SELL" if prediction_svc == 2 else "BUY" if prediction_svc == 1 else "HOLD"
         prediction_naive_bayes = "SELL" if prediction_naive_bayes == 2 else "BUY" if prediction_naive_bayes == 1 else "HOLD"
         prediction_dt = "SELL" if prediction_dt == 2 else "BUY" if prediction_dt == 1 else "HOLD"
-        st.write(f"KNN: {prediction_knn}")
-        st.write(f"Logistic Regression: {prediction_log_reg}")
-        st.write(f"SVC: {prediction_svc}")
-        st.write(f"Naive Bayes: {prediction_naive_bayes}")
-        st.write(f"Decision Tree: {prediction_dt}")
         
+        col1, col2, col3, col4, col5 = st.columns(5)
+        
+        with col1:
+            st.write(f"KNN: {prediction_knn}")
+        with col2:
+            st.write(f"Logistic Regression: {prediction_log_reg}")
+        with col3:
+            st.write(f"SVC: {prediction_svc}")
+        with col4:
+            st.write(f"Naive Bayes: {prediction_naive_bayes}")
+        with col5:
+            st.write(f"Decision Tree: {prediction_dt}")
+
 
 
         st.write("## Appendix")
