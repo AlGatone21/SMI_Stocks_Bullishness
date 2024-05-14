@@ -76,9 +76,9 @@ def get_stock_current_price(ticker):
 @st.cache_data()
 def get_stock_returns(ticker):
     try:
-        stock = yf.Ticker(ticker)
-        data = stock.history(period="7d")
-        return round(data['Close'][-1] - data['Open'][0], 2)
+        data = get_stock_series(ticker)
+        returns = (data[-1] - data[0]) / data[0]
+        return returns
     except:
         return "data not available"
 
