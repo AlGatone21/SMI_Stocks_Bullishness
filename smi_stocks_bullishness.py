@@ -219,7 +219,7 @@ log_reg = pickle.load(open("logistic_regression.sav", 'rb'))
 svc = pickle.load(open("svc.sav", 'rb'))
 
 # Load the XGBoost Model
-#log_reg = pickle.load(open("xgboost.sav", 'rb'))
+xgboost = pickle.load(open("xgboost.pkl", 'rb'))
 
 # Load the Naive Bayes Model
 naive_bayes = pickle.load(open("naive_bayes.sav", 'rb'))
