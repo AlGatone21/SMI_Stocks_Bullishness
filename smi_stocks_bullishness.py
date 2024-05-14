@@ -233,7 +233,18 @@ def predict_upper_limit(open, sentiment, volume, volatility, returnt1, alpha = 0
 
 def predict_return_knn(sentiment, volume, volatility, returnt1):
     volume = np.log(volume)
-    returns = knn_model.predict([[sentiment, volume, volatility, returnt1]])[0]
+    # Create a DataFrame with the input data
+    input_data = pd.DataFrame([[sentiment, volume, volatility, returnt1]], columns=["Sentiment_Score_t1", "log_Volume_t1", "Volatility_t1", "Return_t1"])
+    # Make a prediction with the KNN model
+    label = knn_model.predict(input_data)[0]
+
+    if label == 2:
+        returns = "SELL"
+    elif label == 0:
+        returns = "HOLD"
+    else:
+        returns = "BUY"
+
     return returns
 
 smi = pd.read_excel("SMI.xlsx") # Load the SMI Companies
