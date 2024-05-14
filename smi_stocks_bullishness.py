@@ -211,7 +211,7 @@ def bullishness(news_analyzed):
 model = load_pickle('linear_regr_model.pickle')
 
 #load the knn model
-with open('knn_model.pickle', 'rb') as f:
+with open('knn.pickle', 'rb') as f:
     knn_model = pickle.load(f)
 
 
