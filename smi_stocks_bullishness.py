@@ -209,6 +209,9 @@ def bullishness(news_analyzed):
 # Load the linear model
 model = load_pickle('linear_regr_model.pickle')
 
+# Load the KNN model
+knn_model = load_pickle('knn_model.pkl')
+
 
 def predict_stock_price(open, sentiment, volume, volatility, returnt1):
     volume = np.log(volume)
