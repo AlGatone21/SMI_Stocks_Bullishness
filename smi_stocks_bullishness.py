@@ -241,22 +241,6 @@ def predict_upper_limit(open, sentiment, volume, volatility, returnt1, alpha = 0
     returns =  model.conf_int(alpha)[1]["const"] + model.conf_int(alpha)[1]["Sentiment_Score_t1"] * sentiment + model.conf_int(alpha)[1]["log_Volume_t1"] * volume + model.conf_int(alpha)[1]["Volatility_t1"] * volatility + model.conf_int(alpha)[1]["Return_t1"] * returnt1
     return open * (1 + returns)
 
-def predict_return_knn(sentiment, volume, volatility, returnt1):
-    volume = np.log(volume)
-    # Create a DataFrame with the input data
-    input_data = pd.DataFrame([[sentiment, volume, volatility, returnt1]], columns=["Sentiment_Score_t1", "log_Volume_t1", "Volatility_t1", "Return_t1"])
-    # Make a prediction with the KNN model
-    label = knn_model.predict(input_data)[0]
-
-    if label == 2:
-        returns = "SELL"
-    elif label == 0:
-        returns = "HOLD"
-    else:
-        returns = "BUY"
-
-    return returns
-
 smi = pd.read_excel("SMI.xlsx") # Load the SMI Companies
 
 ############################################################################################################
@@ -386,7 +370,7 @@ def app():
         st.plotly_chart(fig, use_container_width=True)
 
         st.write("## Machine Learning Classifiers Prediction")
-        prediction_knn = predict_return_knn(sentiment, volume, volatility, returnt1)
+        prediction_knn = knn_model.predict([[sentiment, volume, volatility, returnt1]])[0]
         prediction_log_reg = log_reg.predict([[sentiment, volume, volatility, returnt1]])[0]
         prediction_svc = svc.predict([[sentiment, volume, volatility, returnt1]])[0]
         prediction_naive_bayes = naive_bayes.predict([[sentiment, volume, volatility, returnt1]])[0]
@@ -396,7 +380,7 @@ def app():
         st.write(f"The SVC model predicts a {prediction_svc} recommendation for {ticker}.")
         st.write(f"The Naive Bayes model predicts a {prediction_naive_bayes} recommendation for {ticker}.")
         st.write(f"The Decision Tree model predicts a {prediction_dt} recommendation for {ticker}.")
-        
+
         
 
         st.write("## Appendix")
