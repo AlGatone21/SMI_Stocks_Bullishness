@@ -108,8 +108,8 @@ def get_stock_volatility(ticker):
     try:
         stock = yf.Ticker(ticker)
         data = stock.history(period="7d")
-        daily_returns = data['Close'].pct_change().dropna()
-        volatility = daily_returns.std()
+        data["Return"] = data["Close"].pct_change()
+        volatility = data["Return"].std()
     except:
         return "data not available"
 
