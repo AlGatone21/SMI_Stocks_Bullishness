@@ -108,7 +108,8 @@ def get_stock_volatility(ticker):
     try:
         stock = yf.Ticker(ticker)
         data = stock.history(period="7d")
-        return round(data['High'].std(), 2)
+        daily_returns = data['Close'].pct_change().dropna()
+        volatility = daily_returns.std()
     except:
         return "data not available"
 
@@ -331,7 +332,7 @@ def app():
         returnt1 = returns
 
         st.write(f"The current volume of {ticker} is {volume}, the volatility is {volatility} and the bullishness sentiment is {sentiment}%, the return of the last week is {returnt1}%")
-        
+
         prediction = max(predict_stock_price(open_price, sentiment, volume, volatility, returnt1),0)
         return1w = (prediction - open_price) / open_price
         color3 = "green" if return1w >= 0 else "red"
