@@ -206,8 +206,11 @@ def bullishness(news_analyzed):
         bullishness = 0
     return bullishness
 
-# Load the model
+# Load the linear model
 model = load_pickle('linear_regr_model.pickle')
+
+#load the knn model
+knn_model = pickle.load(open('knn_model.pickle', 'rb'))
 
 
 def predict_stock_price(open, sentiment, volume, volatility, returnt1):
@@ -225,6 +228,11 @@ def predict_upper_limit(open, sentiment, volume, volatility, returnt1, alpha = 0
     volume = np.log(volume)
     returns =  model.conf_int(alpha)[1]["const"] + model.conf_int(alpha)[1]["Sentiment_Score_t1"] * sentiment + model.conf_int(alpha)[1]["log_Volume_t1"] * volume + model.conf_int(alpha)[1]["Volatility_t1"] * volatility + model.conf_int(alpha)[1]["Return_t1"] * returnt1
     return open * (1 + returns)
+
+def predict_return_knn(sentiment, volume, volatility, returnt1):
+    volume = np.log(volume)
+    returns = knn_model.predict([[sentiment, volume, volatility, returnt1]])[0]
+    return returns
 
 smi = pd.read_excel("SMI.xlsx") # Load the SMI Companies
 
@@ -353,6 +361,11 @@ def app():
         fig.update_layout(autosize=True, height=400, xaxis_title = "Date", yaxis_title = "CHF", title="1 Week Target Price")
         fig.update_yaxes(range=[min(data_lower.values)*0.9, max(data_upper.values)*1.1])
         st.plotly_chart(fig, use_container_width=True)
+
+        st.write("## Prediction with KNN Model")
+        prediction_knn = predict_return_knn(sentiment, volume, volatility, returnt1)
+        st.write(f"The predicted 1 week stock return for {ticker} with the KNN model is {prediction_knn}")
+
 
         st.write("## Appendix")
         if st.checkbox("Show Model Details"):
