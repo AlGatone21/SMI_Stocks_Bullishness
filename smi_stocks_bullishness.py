@@ -374,9 +374,9 @@ def app():
         st.plotly_chart(fig, use_container_width=True)
 
         st.write("## KNN Model Prediction")
-        prediction_knn = predict_return_knn(sentiment, volume, volatility, returnt1)
-        st.write(f"The KNN model predicts a {prediction_knn} recommendation for {ticker}.")
-
+        #prediction_knn = predict_return_knn(sentiment, volume, volatility, returnt1)
+        #st.write(f"The KNN model predicts a {prediction_knn} recommendation for {ticker}.")
+        st.write(knn_model)
 
         st.write("## Appendix")
         if st.checkbox("Show Model Details"):
