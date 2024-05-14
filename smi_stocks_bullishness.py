@@ -384,7 +384,7 @@ def app():
         col1, col2, col3, col4, col5 = st.columns(5)
         
         with col1:
-            st.markdown(f"KNN: <span style='color: {"red" if prediction_knn == "SELL" else "green" if prediction_knn == "BUY" else "black"};'>{prediction_knn}</span>", unsafe_allow_html=True)
+            st.markdown(f"""KNN: <span style='color: {"red" if prediction_knn == "SELL" else "green" if prediction_knn == "BUY" else "black"};'>{prediction_knn}</span>""", unsafe_allow_html=True)
         with col2:
             st.write(f"Logistic Regression: {prediction_log_reg}")
         with col3:
