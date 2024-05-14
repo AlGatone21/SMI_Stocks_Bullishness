@@ -114,7 +114,7 @@ def get_stock_volatility(ticker):
                 data["Return"].iloc[i] = (data["Close"].iloc[i] - data["Close"].iloc[i-1]) / data["Close"].iloc[i-1]
             except:
                 data["Return"].iloc[i] = 0
-        volatility = data["Return"].std()
+        volatility = data["Return"].mean()
     except:
         return "data not available"
 
