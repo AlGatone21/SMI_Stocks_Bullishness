@@ -209,10 +209,6 @@ def bullishness(news_analyzed):
 # Load the linear model
 model = load_pickle('linear_regr_model.pickle')
 
-#load the knn model
-with open('knn_best.pickle', 'rb') as f:
-    knn_model = pickle.load(f)
-
 
 def predict_stock_price(open, sentiment, volume, volatility, returnt1):
     volume = np.log(volume)
@@ -374,10 +370,6 @@ def app():
         fig.update_yaxes(range=[min(data_lower.values)*0.9, max(data_upper.values)*1.1])
         st.plotly_chart(fig, use_container_width=True)
 
-        st.write("## Prediction with KNN Model")
-        #prediction_knn = predict_return_knn(sentiment, volume, volatility, returnt1)
-        #st.write(f"The predicted 1 week stock return for {ticker} with the KNN model is {prediction_knn}")
-        st.write(knn_model)
 
         st.write("## Appendix")
         if st.checkbox("Show Model Details"):
