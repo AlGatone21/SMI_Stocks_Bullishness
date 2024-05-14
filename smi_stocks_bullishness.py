@@ -1,5 +1,17 @@
 ############################################################################################################
-# S&PStock Bullishness Sentiment Analysis
+# DISCLAIMER
+# This app is a Stock Bullishness Sentiment Analysis tool that can be used to analyze and predict SMI 
+# stocks returns. The information provided in this app is for informational purposes only and should 
+# not be considered as financial advice.
+############################################################################################################
+
+############################################################################################################
+# Github Copilot was used to assist develop the code below. The generated code was then modified to fit 
+# the requirements. No prompt is available, since the autocompletion function was used to generate the code.
+############################################################################################################
+
+############################################################################################################
+# SMI Stocks Bullishness Index
 ###########################§################################################################################
 
 import streamlit as st
@@ -395,7 +407,7 @@ def app():
         accuracies = {
             'KNN': 43.4,
             'Logistic Regression': 37.5,
-            'SVC': 37.6,
+            'SVC': 37.2,
             'Naive Bayes': 36.2,
             'Decision Tree': 37.0
         }
