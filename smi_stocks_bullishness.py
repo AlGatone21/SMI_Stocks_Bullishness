@@ -215,17 +215,17 @@ knn_model = pickle.load(open("knn.sav", 'rb'))
 # Load the Logistic Regression Model
 log_reg = pickle.load(open("logistic_regression.sav", 'rb'))
 
-# Load the SCV Model
-log_reg = pickle.load(open("svc.sav", 'rb'))
+# Load the SVC Model
+svc = pickle.load(open("svc.sav", 'rb'))
 
 # Load the XGBoost Model
-log_reg = pickle.load(open("xgboost.sav", 'rb'))
+#log_reg = pickle.load(open("xgboost.sav", 'rb'))
 
 # Load the Naive Bayes Model
-log_reg = pickle.load(open("naive_bayes.sav", 'rb'))
+naive_bayes = pickle.load(open("naive_bayes.sav", 'rb'))
 
 # Load the Decision Tree Model
-log_reg = pickle.load(open(".sav", 'rb'))
+dt = pickle.load(open("decision_tree.sav", 'rb'))
 
 
 def predict_stock_price(open, sentiment, volume, volatility, returnt1):
