@@ -404,7 +404,7 @@ def app():
         
         # Display the prediction for the selected model
         st.markdown(f"""The {selected_model} model predicts a <span style='color: {"red" if predictions[selected_model] == "SELL" else "green" if predictions[selected_model] == "BUY" else "black"};font-weight: bold;;'>{predictions[selected_model]}</span> 
-        reccomandation for the {ticker} stock, the accuracy of this classifier is {predictions[selected_model]} """, unsafe_allow_html=True)
+        reccomandation for the {ticker} stock, the accuracy of this classifier is {accuracies[selected_model]} """, unsafe_allow_html=True)
 
         st.write("## Appendix")
         if st.checkbox("Show Model Details"):
