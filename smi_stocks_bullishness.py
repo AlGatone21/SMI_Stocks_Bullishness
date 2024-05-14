@@ -294,7 +294,7 @@ def app():
             color = "green" if returns >= 0 else "red"
             rgb = mcolors.to_rgb(color)  # Convert the color name to RGB values
             red, green, blue = [int(255 * x) for x in rgb]  # Scale the RGB values to the range 0-255
-            st.markdown(f"The return of {ticker} for the last week is <span style='color: {color}; font-weight: bold;'>{returns}%</span>", unsafe_allow_html=True)
+            st.markdown(f"The return of {ticker} for the last week is <span style='color: {color}; font-weight: bold;'>{round(returns*100,2)}%</span>", unsafe_allow_html=True)
 
         col1, col2 = st.columns([1,1])
         with col1.container():
