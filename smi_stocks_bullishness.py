@@ -108,7 +108,12 @@ def get_stock_volatility(ticker):
     try:
         stock = yf.Ticker(ticker)
         data = stock.history(period="7d")
-        data["Return"] = data["Close"].pct_change()
+        data["Return"] = 0
+        for i in range(1, len(data)):
+            try:
+                data["Return"].iloc[i] = (data["Close"].iloc[i] - data["Close"].iloc[i-1]) / data["Close"].iloc[i-1]
+            except:
+                data["Return"].iloc[i] = 0
         volatility = data["Return"].std()
     except:
         return "data not available"
