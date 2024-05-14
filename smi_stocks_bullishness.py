@@ -393,11 +393,11 @@ def app():
         }
 
         accuracies = {
-            'KNN': 0.55,
-            'Logistic Regression': 0.65,
-            'SVC': 0.60,
-            'Naive Bayes': 0.50,
-            'Decision Tree': 0.45
+            'KNN': 43.4,
+            'Logistic Regression': 37.5,
+            'SVC': 37.6,
+            'Naive Bayes': 36.2,
+            'Decision Tree': 37.0
         }
 
         selected_model = st.selectbox('Select a model:', models)
