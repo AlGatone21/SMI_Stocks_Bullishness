@@ -391,10 +391,19 @@ def app():
             'Naive Bayes': prediction_naive_bayes,
             'Decision Tree': prediction_dt
         }
+
+        accuracies = {
+            'KNN': 0.55,
+            'Logistic Regression': 0.65,
+            'SVC': 0.60,
+            'Naive Bayes': 0.50,
+            'Decision Tree': 0.45
+        }
+
         selected_model = st.selectbox('Select a model:', models)
         
         # Display the prediction for the selected model
-        st.markdown(f"""{selected_model}: <span style='color: {"red" if predictions[selected_model] == "SELL" else "green" if predictions[selected_model] == "BUY" else "black"};font-weight: bold;;'>{predictions[selected_model]}</span>""", unsafe_allow_html=True)
+        st.markdown(f"""The {selected_model} model predicts a: <span style='color: {"red" if predictions[selected_model] == "SELL" else "green" if predictions[selected_model] == "BUY" else "black"};font-weight: bold;;'>{predictions[selected_model]}</span> reccomandation""", unsafe_allow_html=True)
 
         st.write("## Appendix")
         if st.checkbox("Show Model Details"):
