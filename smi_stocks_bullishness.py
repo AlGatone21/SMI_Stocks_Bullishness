@@ -375,13 +375,7 @@ def app():
         prediction_svc = svc.predict([[sentiment, volume, volatility, returnt1]])[0]
         prediction_naive_bayes = naive_bayes.predict([[sentiment, volume, volatility, returnt1]])[0]
         prediction_dt = dt.predict([[sentiment, volume, volatility, returnt1]])[0]
-        st.write(f"The KNN model predicts a {prediction_knn} recommendation for {ticker}.")
-        st.write(f"The Logistic Regression model predicts a {prediction_log_reg} recommendation for {ticker}.")
-        st.write(f"The SVC model predicts a {prediction_svc} recommendation for {ticker}.")
-        st.write(f"The Naive Bayes model predicts a {prediction_naive_bayes} recommendation for {ticker}.")
-        st.write(f"The Decision Tree model predicts a {prediction_dt} recommendation for {ticker}.")
-
-        
+        st.write(f"KNN: {prediction_knn} | Logistic Regression: {prediction_log_reg} | SVC: {prediction_svc} | Naive Bayes: {prediction_naive_bayes} | Decision Tree: {prediction_dt}")
 
         st.write("## Appendix")
         if st.checkbox("Show Model Details"):
