@@ -382,7 +382,7 @@ def app():
         st.plotly_chart(fig, use_container_width=True)
 
         st.write("## Machine Learning Classifiers Prediction")
-        prediction_knn = knn_model.predict([[sentiment, volume, volatility, returnt1]])[0]
+        prediction_knn = knn_model.predict([[sentiment, np.log(volume), volatility, returnt1]])[0]
         prediction_log_reg = log_reg.predict([[sentiment, volume, volatility, returnt1]])[0]
         prediction_svc = svc.predict([[sentiment, volume, volatility, returnt1]])[0]
         prediction_naive_bayes = naive_bayes.predict([[sentiment, volume, volatility, returnt1]])[0]
