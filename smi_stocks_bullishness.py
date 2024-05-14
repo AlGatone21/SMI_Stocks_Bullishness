@@ -376,7 +376,7 @@ def app():
         st.plotly_chart(fig, use_container_width=True)
 
         st.write("## Prediction with KNN Model")
-        prediction_knn = predict_return_knn(sentiment, volume, volatility, returnt1)
+        prediction_knn = predict_return_knn(0.5, 10.5, 0.5, 0.5)
         st.write(f"The predicted 1 week stock return for {ticker} with the KNN model is {prediction_knn}")
 
 
