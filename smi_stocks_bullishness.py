@@ -375,7 +375,18 @@ def app():
         prediction_svc = svc.predict([[sentiment, volume, volatility, returnt1]])[0]
         prediction_naive_bayes = naive_bayes.predict([[sentiment, volume, volatility, returnt1]])[0]
         prediction_dt = dt.predict([[sentiment, volume, volatility, returnt1]])[0]
-        st.write(f"KNN: {prediction_knn} | Logistic Regression: {prediction_log_reg} | SVC: {prediction_svc} | Naive Bayes: {prediction_naive_bayes} | Decision Tree: {prediction_dt}")
+        prediction_knn = "SELL" if prediction_knn == 2 else "BUY" if prediction_knn == 1 else "HOLD"
+        prediction_log_reg = "SELL" if prediction_log_reg == 2 else "BUY" if prediction_log_reg == 1 else "HOLD"
+        prediction_svc = "SELL" if prediction_svc == 2 else "BUY" if prediction_svc == 1 else "HOLD"
+        prediction_naive_bayes = "SELL" if prediction_naive_bayes == 2 else "BUY" if prediction_naive_bayes == 1 else "HOLD"
+        prediction_dt = "SELL" if prediction_dt == 2 else "BUY" if prediction_dt == 1 else "HOLD"
+        st.write(f"KNN: {prediction_knn}")
+        st.write(f"Logistic Regression: {prediction_log_reg}")
+        st.write(f"SVC: {prediction_svc}")
+        st.write(f"Naive Bayes: {prediction_naive_bayes}")
+        st.write(f"Decision Tree: {prediction_dt}")
+        
+
 
         st.write("## Appendix")
         if st.checkbox("Show Model Details"):
