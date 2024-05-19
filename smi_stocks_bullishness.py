@@ -263,8 +263,9 @@ backtest_data = pd.read_excel("Knn_Backtest.xlsx") # Load the backtest data
 
 # Compute the backtest for the stock
 @st.cache_data()
-def compute_backtest(df, ticker):
+def compute_backtest(df, ticker, start_date, end_date):
     data = df[df["Ticker"] == ticker].copy()
+    data = data[(data["Date"] >= start_date) & (data["Date"] <= end_date)]
     data.reset_index(drop=True, inplace=True)
     data["Holding_index"] = 0
     data["Strategy_index"] = 0
@@ -457,7 +458,9 @@ def app():
         
         if st.checkbox("Show Backtesting Results"):
             st.write("## Backtesting Results with the KNN Model")
-            data = compute_backtest(backtest_data, ticker)
+            start_date = st.date_input("Start Date", datetime(2022, 1, 1))
+            end_date = st.date_input("End Date", datetime.today())
+            data = compute_backtest(backtest_data, tickerm start_date, end_date)
             holding_returns = data["Holding_index"].iloc[-1]
             strategy_returns = data["Strategy_index"].iloc[-1]
             st.write(f"Holding Returns: {round(holding_returns-100,0)}%")
