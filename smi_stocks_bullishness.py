@@ -40,14 +40,15 @@ from statsmodels.iolib.smpickle import load_pickle
 # Functions defnitons                                                                                      #
 ############################################################################################################
 
+# search for news articles using Google News RSS feed
 def search_news(source, start_date, end_date, max_items=100):
-    url = f"https://news.google.com/rss/search?q=source:{source}%20after:{start_date}%20before:{end_date}"
+    url = f"https://news.google.com/rss/search?q=source:{source}%20after:{start_date}%20before:{end_date}" # Create the URL for the RSS feed
     response = requests.get(url)
     
     # Parse the XML response
     root = etree.fromstring(response.content)
 
-    # Extract the relevant data
+    # Extract the relevant data form the response
     data = []
     for i, item in enumerate(root.findall(".//item")):
         if i >= max_items:
@@ -184,28 +185,29 @@ def get_stock_news():
 
 @st.cache_data()
 def analyze_news_sentiment(news):
-
+    # Load the sentiment analysis model from transformers
     pipe = pipeline("text-classification", model="scherrmann/GermanFinBert_SC_Sentiment")
 
     # Analyze the sentiment of each news article
     sentiment_data = []
     for article in news["Text"]:
         try:
-            sentiment = pipe(article[:512])
+            sentiment = pipe(article[:512]) # Limit the text to 512 tokens (model requirement)
             sentiment_data.append(sentiment[0]["label"])
         except:
-            sentiment_data.append("not_found")
+            sentiment_data.append("not_found") # If the sentiment cannot be analyzed, set it to "not_found"
 
     # Add the sentiment data to the news dataframe
     news["Sentiment"] = sentiment_data
     return news
 
+# Calculate the bullishness sentiment of the news
 @st.cache_data()
 def bullishness(news_analyzed):
     positive = 0
     negative = 0
     neutral = 0 
-    for i in range(0, len(news_analyzed)):
+    for i in range(0, len(news_analyzed)): # Count the number of positive, negative, and neutral news articles
         if news_analyzed["Sentiment"].iloc[i] == "Positiv":
             positive += 1
         elif news_analyzed["Sentiment"].iloc[i] == "Negativ":
@@ -237,18 +239,19 @@ naive_bayes = pickle.load(open("naive_bayes.sav", 'rb'))
 # Load the Decision Tree Model
 dt = pickle.load(open("decision_tree.sav", 'rb'))
 
-
+# predict the stock price using the linear model (open + return)
 def predict_stock_price(open, sentiment, volume, volatility, returnt1):
     volume = np.log(volume)
     returns = model.predict([[1, sentiment, volume, volatility, returnt1]])[0]
     return open * (1 + returns)
 
-
+# predict the lower limit of the stock price using the linear model (open + return)
 def predict_lower_limit(open, sentiment, volume, volatility, returnt1, alpha = 0.05):
     volume = np.log(volume)
     returns =  model.conf_int(alpha)[0]["const"] + model.conf_int(alpha)[0]["Sentiment_Score_t1"] * sentiment + model.conf_int(alpha)[0]["log_Volume_t1"] * volume + model.conf_int(alpha)[0]["Volatility_t1"] * volatility + model.conf_int(alpha)[0]["Return_t1"] * returnt1
     return open * (1 + returns)
 
+# predict the upper limit of the stock price using the linear model (open + return)
 def predict_upper_limit(open, sentiment, volume, volatility, returnt1, alpha = 0.05):
     volume = np.log(volume)
     returns =  model.conf_int(alpha)[1]["const"] + model.conf_int(alpha)[1]["Sentiment_Score_t1"] * sentiment + model.conf_int(alpha)[1]["log_Volume_t1"] * volume + model.conf_int(alpha)[1]["Volatility_t1"] * volatility + model.conf_int(alpha)[1]["Return_t1"] * returnt1
@@ -313,8 +316,9 @@ def app():
             news_analyzed = analyze_news_sentiment(news)
             bullishness_sentiment = bullishness(news_analyzed)
 
-            color2 = "green" if bullishness_sentiment >= 0 else "red"
+            color2 = "green" if bullishness_sentiment >= 0 else "red" # Set the color based on the sentiment
 
+            # Create the gauge plot diplaing the bullishness sentiment of the SMI
             fig = go.Figure(go.Indicator(
                 mode="gauge+number",
                 value=bullishness_sentiment,
@@ -325,14 +329,14 @@ def app():
             st.plotly_chart(fig, use_container_width=True)
         
         st.write("## Stock Prediction")
-        open_price = get_stock_current_price(ticker)
-        volume = get_stock_volume(ticker)
-        volatility = get_stock_volatility(ticker)
-        sentiment = bullishness_sentiment/100
+        open_price = get_stock_current_price(ticker) # Get the current stock price
+        volume = get_stock_volume(ticker) # Get the stock volume
+        volatility = get_stock_volatility(ticker) # Get the stock volatility
+        sentiment = bullishness_sentiment/100 #convert the sentiment to a scale between -1 and 1
         returnt1 = returns
     
-        prediction = max(predict_stock_price(open_price, sentiment, volume, volatility, returnt1),0)
-        return1w = (prediction - open_price) / open_price
+        prediction = max(predict_stock_price(open_price, sentiment, volume, volatility, returnt1),0) # Predict the stock price, ensuring it is not negative
+        return1w = (prediction - open_price) / open_price # Calculate the predicted return
         color3 = "green" if return1w >= 0 else "red"
         rgb3 = mcolors.to_rgb(color3)  # Convert the color name to RGB values
         red3, green3, blue3 = [int(255 * x) for x in rgb3]  # Scale the RGB values to the range 0-255        
@@ -344,13 +348,13 @@ def app():
         upper_limit = max(predict_upper_limit(open_price, sentiment, volume, volatility, returnt1, alpha),0)
         lower_limit = max(predict_lower_limit(open_price, sentiment, volume, volatility, returnt1, alpha), 0)
 
-        max_upper_limit = max(predict_upper_limit(open_price, sentiment, volume, volatility, returnt1, 0.01),0)
-        min_lower_limit = max(predict_lower_limit(open_price, sentiment, volume, volatility, returnt1, 0.01),0)
+        max_upper_limit = max(predict_upper_limit(open_price, sentiment, volume, volatility, returnt1, 0.01),0) # Calculate the 99% confidence interval
+        min_lower_limit = max(predict_lower_limit(open_price, sentiment, volume, volatility, returnt1, 0.01),0) # Calculate the 99% confidence interval
 
-        prediction_volatility = round(((max_upper_limit - min_lower_limit) / prediction) * 100, 2)
+        prediction_volatility = round(((max_upper_limit - min_lower_limit) / prediction) * 100, 2) # Calculate the prediction volatility as the range of the 99% confidence interval divided by the prediction
         
         st.write(f"The {confidence}% confidence interval for the 1 week stock price is between {round(lower_limit, 2)} and {round(upper_limit, 2)} CHF")
-        if prediction_volatility > 30:
+        if prediction_volatility > 30: # Display a warning if the prediction volatility is high
             st.markdown("<div style='color: red; font-weight: bold;'>Warning:</div>", unsafe_allow_html=True)
             st.write(f'The prediction volatility is high with {prediction_volatility}% of the predicted price. This indicates a high uncertainty in the prediction.')
 
@@ -383,6 +387,7 @@ def app():
         st.plotly_chart(fig, use_container_width=True)
 
         st.write("## Machine Learning Classifiers Prediction")
+        # Predict the stock price using the machine learning models and convert the labels to BUY, SELL, or HOLD
         prediction_knn = knn_model.predict([[sentiment, np.log(volume), volatility, returnt1]])[0]
         prediction_log_reg = log_reg.predict([[sentiment, np.log(volume), volatility, returnt1]])[0]
         prediction_svc = svc.predict([[sentiment, volume, volatility, returnt1]])[0]
@@ -404,7 +409,7 @@ def app():
             'Naive Bayes': prediction_naive_bayes,
             'Decision Tree': prediction_dt
         }
-
+        # accuracies of the models, see the model accuracies in the model training notebook
         accuracies = {
             'KNN': 43.4,
             'Logistic Regression': 37.5,
@@ -413,14 +418,14 @@ def app():
             'Decision Tree': 37.0
         }
 
-        selected_model = st.selectbox('Select a model:', models)
+        selected_model = st.selectbox('Select a model:', models) # Select the model to display the prediction
         
         # Display the prediction for the selected model
         st.markdown(f"""The {selected_model} model predicts a <span style='color: {"red" if predictions[selected_model] == "SELL" else "green" if predictions[selected_model] == "BUY" else "black"};font-weight: bold;;'>{predictions[selected_model]}</span> 
         reccomandation for the {ticker} stock, the accuracy of this classifier is {accuracies[selected_model]}%""", unsafe_allow_html=True)
 
         st.write("## Appendix")
-        if st.checkbox("Show Model Details"):
+        if st.checkbox("Show Linear Model Details"): # Display the model details
             st.write("## Model Summary")
             st.write(model.summary())
 
@@ -428,11 +433,11 @@ def app():
         if st.checkbox("Show News"):
             st.write("## Recent News")
 
-            for index, row in news.iterrows():
-                st.write(f"### {row['Title']}")
-                st.write(f"Published on {row['Date']} by {row['Publisher']}")
-                st.markdown(row['Description'], unsafe_allow_html=True)
+            for index, row in news.iterrows(): # Display the news articles
+                st.write(f"### {row['Title']}") # Display the title of the article
+                st.write(f"Published on {row['Date']} by {row['Publisher']}") # Display the published date and the publisher
+                st.markdown(row['Description'], unsafe_allow_html=True) # Display the description of the article (link to the article)
                 st.write("---")
 
-if __name__ == '__main__':
+if __name__ == '__main__': # Run the app
     app()
