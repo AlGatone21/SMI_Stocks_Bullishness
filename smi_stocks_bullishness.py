@@ -264,17 +264,17 @@ backtest_data = pd.read_excel("Knn_Backtest.xlsx") # Load the backtest data
 # Compute the backtest for the stock
 @st.cache_data()
 def compute_backtest(df, ticker, start_date, end_date):
-    data = df[df["Ticker"] == ticker].copy()
-    data = data[(data["Date"] >= start_date) & (data["Date"] <= end_date)]
-    data.reset_index(drop=True, inplace=True)
-    data["Holding_index"] = 0
-    data["Strategy_index"] = 0
-    data.loc[0,"Holding_index"] = 100
-    data.loc[0,"Strategy_index"] = 100
-    for i in range(1, len(data)):
+    data = df[df["Ticker"] == ticker].copy() # Filter the data for the selected stock
+    data = data[(data["Date"] >= start_date) & (data["Date"] <= end_date)] # Filter the data for the selected date range
+    data.reset_index(drop=True, inplace=True) # Reset the index of the data
+    data["Holding_index"] = 0 # Initialize the holding index
+    data["Strategy_index"] = 0 # Initialize the strategy index
+    data.loc[0,"Holding_index"] = 100 # Set the initial holding index to 100
+    data.loc[0,"Strategy_index"] = 100 # Set the initial strategy index to 100
+    for i in range(1, len(data)): # Compute the holding and strategy index for each period (week)
         data.loc[i,"Holding_index"] = data.loc[i-1,"Holding_index"] * (1 + data.loc[i,"weekly.returns"])
         data.loc[i,"Strategy_index"] = data.loc[i-1,"Strategy_index"] * (1 + data.loc[i,"strategy_returns"])
-    return data
+    return data # Return the backtest data
 
 ############################################################################################################
 # Streamlit App
@@ -456,22 +456,22 @@ def app():
                 st.markdown(row['Description'], unsafe_allow_html=True) # Display the description of the article (link to the article)
                 st.write("---")
         
-        if st.checkbox("Show Backtesting Results"):
+        if st.checkbox("Show Backtesting Results"): # Display the backtesting results
             st.write("## Backtesting Results with the KNN Model")
-            start_date = pd.Timestamp(st.date_input("Start Date", datetime(2010, 1, 1)))
-            end_date = pd.Timestamp(st.date_input("End Date", datetime.today()))
-            data = compute_backtest(backtest_data, ticker, start_date, end_date)
-            actual_start_date = data["Date"].iloc[0]
-            actual_end_date = data["Date"].iloc[-1]
-            holding_returns = data["Holding_index"].iloc[-1]
-            strategy_returns = data["Strategy_index"].iloc[-1]
+            start_date = pd.Timestamp(st.date_input("Start Date", datetime(2010, 1, 1))) # Select the start date
+            end_date = pd.Timestamp(st.date_input("End Date", datetime.today())) # Select the end date
+            data = compute_backtest(backtest_data, ticker, start_date, end_date) # Compute the backtest
+            actual_start_date = data["Date"].iloc[0] # Get the actual start date
+            actual_end_date = data["Date"].iloc[-1] # Get the actual end date
+            holding_returns = data["Holding_index"].iloc[-1] # Get the holding returns
+            strategy_returns = data["Strategy_index"].iloc[-1] # Get the strategy returns
             st.write(f"Holding Returns: {round(holding_returns-100,0)}%")
             st.write(f"Strategy Returns: {round(strategy_returns-100,0)}%")
 
             fig = go.Figure()
 
-            fig.add_trace(go.Scatter(x=data["Date"], y=data["Holding_index"], mode='lines', name='Holding Stock'))
-            fig.add_trace(go.Scatter(x=data["Date"], y=data["Strategy_index"], mode='lines', name='Strategy'))
+            fig.add_trace(go.Scatter(x=data["Date"], y=data["Holding_index"], mode='lines', name='Holding Stock')) # Add the holding stock to the plot
+            fig.add_trace(go.Scatter(x=data["Date"], y=data["Strategy_index"], mode='lines', name='Strategy')) # Add the strategy to the plot
 
             fig.update_layout(title=f'Returns of Strategy vs Holding Stock for {ticker}, between {actual_start_date} and {actual_end_date}',
                             xaxis_title='Date',
