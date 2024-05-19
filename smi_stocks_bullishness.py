@@ -460,7 +460,7 @@ def app():
             st.write("## Backtesting Results with the KNN Model")
             start_date = st.date_input("Start Date", datetime(2022, 1, 1))
             end_date = st.date_input("End Date", datetime.today())
-            data = compute_backtest(backtest_data, tickerm start_date, end_date)
+            data = compute_backtest(backtest_data, ticker, start_date, end_date)
             holding_returns = data["Holding_index"].iloc[-1]
             strategy_returns = data["Strategy_index"].iloc[-1]
             st.write(f"Holding Returns: {round(holding_returns-100,0)}%")
