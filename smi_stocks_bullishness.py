@@ -458,8 +458,21 @@ def app():
         
         if st.checkbox("Show Backtesting Results"):
             st.write("## Backtesting Results with the KNN Model")
-            data = compute_backtest(backtest_data, ticker)
-            st.write(data)
+            data = compute_backtest(backtest_data, ticker)      
+            plt.figure(figsize=(12, 6))
+            plt.plot(data["Date"], data["Holding_index"], label="Holding Stock")
+            plt.plot(data["Date"], data["Strategy_index"], label="Strategy Returns")
+            plt.title(f"Returns of Strategy vs Holding Stock for {ticker}")
+            plt.xlabel("Date")
+            plt.ylabel("Index")
+            plt.legend()
+
+            # performance difference
+            holding_returns = data["Holding_index"].iloc[-1]
+            strategy_returns = data["Strategy_index"].iloc[-1]
+            st.write(f"Holding Returns: {round(holding_returns-100,0)}%")
+            st.write(f"Strategy Returns: {round(strategy_returns-100,0)}%")
+            plt.show()
 
 if __name__ == '__main__': # Run the app
     app()
