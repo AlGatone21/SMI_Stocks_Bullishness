@@ -26,7 +26,6 @@ from transformers import AutoTokenizer, AutoModelForSequenceClassification
 from transformers import pipeline
 import torch
 import plotly.graph_objects as go
-import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
 import requests
 from lxml import etree
