@@ -469,7 +469,9 @@ def app():
                 st.write("---")
         
         if st.checkbox("Show Backtesting Results"):
-            st.write("## Backtesting Results")
+            st.write("## Backtesting Results with the KNN Model")
+
+            plot_strategy_returns(backtest_data, ticker)
 
 if __name__ == '__main__': # Run the app
     app()
