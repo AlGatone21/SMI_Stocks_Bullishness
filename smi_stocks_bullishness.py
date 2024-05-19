@@ -259,6 +259,35 @@ def predict_upper_limit(open, sentiment, volume, volatility, returnt1, alpha = 0
 
 smi = pd.read_excel("SMI.xlsx") # Load the SMI Companies
 
+backtest_data = pd.read_excel("Knn_Backtest.xlsx") # Load the backtest data
+
+# Plot the strategy returns
+def plot_strategy_returns(df, ticker):
+    data = df[df["Ticker"] == ticker].copy()
+    data.reset_index(drop=True, inplace=True)
+    data["Holding_index"] = 0
+    data["Strategy_index"] = 0
+    data.loc[0,"Holding_index"] = 100
+    data.loc[0,"Strategy_index"] = 100
+    for i in range(1, len(data)):
+        data.loc[i,"Holding_index"] = data.loc[i-1,"Holding_index"] * (1 + data.loc[i,"weekly.returns"])
+        data.loc[i,"Strategy_index"] = data.loc[i-1,"Strategy_index"] * (1 + data.loc[i,"strategy_returns"])
+    
+    plt.figure(figsize=(12, 6))
+    plt.plot(data["Date"], data["Holding_index"], label="Holding Stock")
+    plt.plot(data["Date"], data["Strategy_index"], label="Strategy Returns")
+    plt.title(f"Returns of Strategy vs Holding Stock for {ticker}")
+    plt.xlabel("Date")
+    plt.ylabel("Index")
+    plt.legend()
+
+    # performance difference
+    holding_returns = data["Holding_index"].iloc[-1]
+    strategy_returns = data["Strategy_index"].iloc[-1]
+    print(f"Holding Returns: {round(holding_returns-100,0)}%")
+    print(f"Strategy Returns: {round(strategy_returns-100,0)}%")
+    plt.show()
+
 ############################################################################################################
 # Streamlit App
 ###########################################################################################################
@@ -438,6 +467,9 @@ def app():
                 st.write(f"Published on {row['Date']} by {row['Publisher']}") # Display the published date and the publisher
                 st.markdown(row['Description'], unsafe_allow_html=True) # Display the description of the article (link to the article)
                 st.write("---")
+        
+        if st.checkbox("Show Backtesting Results"):
+            st.write("## Backtesting Results")
 
 if __name__ == '__main__': # Run the app
     app()
