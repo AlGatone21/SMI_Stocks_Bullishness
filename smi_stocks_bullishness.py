@@ -458,7 +458,7 @@ def app():
         
         if st.checkbox("Show Backtesting Results"):
             st.write("## Backtesting Results with the KNN Model")
-            start_date = st.date_input("Start Date", datetime(2022, 1, 1))
+            start_date = st.date_input("Start Date", datetime(2010, 1, 1))
             end_date = st.date_input("End Date", datetime.today())
             data = compute_backtest(backtest_data, ticker, start_date, end_date)
             holding_returns = data["Holding_index"].iloc[-1]
