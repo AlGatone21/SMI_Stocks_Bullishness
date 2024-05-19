@@ -458,8 +458,8 @@ def app():
         
         if st.checkbox("Show Backtesting Results"): # Display the backtesting results
             st.write("## Backtesting Results with the KNN Model")
-            start_date = pd.Timestamp(st.date_input("Start Date", datetime(2010, 1, 1))) # Select the start date
-            end_date = pd.Timestamp(st.date_input("End Date", datetime.today())) # Select the end date
+            start_date = pd.Timestamp(st.date_input("Start Date", datetime(2010, 1, 1))) # Select the start date, convert to a pandas timestamp
+            end_date = pd.Timestamp(st.date_input("End Date", datetime.today())) # Select the end date, convert to a pandas timestamp
             data = compute_backtest(backtest_data, ticker, start_date, end_date) # Compute the backtest
             actual_start_date = data["Date"].iloc[0] # Get the actual start date
             actual_end_date = data["Date"].iloc[-1] # Get the actual end date
