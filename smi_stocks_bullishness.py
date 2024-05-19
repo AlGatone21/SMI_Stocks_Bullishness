@@ -461,6 +461,8 @@ def app():
             start_date = pd.Timestamp(st.date_input("Start Date", datetime(2010, 1, 1)))
             end_date = pd.Timestamp(st.date_input("End Date", datetime.today()))
             data = compute_backtest(backtest_data, ticker, start_date, end_date)
+            actual_start_date = data["Date"].iloc[0]
+            actual_end_date = data["Date"].iloc[-1]
             holding_returns = data["Holding_index"].iloc[-1]
             strategy_returns = data["Strategy_index"].iloc[-1]
             st.write(f"Holding Returns: {round(holding_returns-100,0)}%")
@@ -469,9 +471,9 @@ def app():
             fig = go.Figure()
 
             fig.add_trace(go.Scatter(x=data["Date"], y=data["Holding_index"], mode='lines', name='Holding Stock'))
-            fig.add_trace(go.Scatter(x=data["Date"], y=data["Strategy_index"], mode='lines', name='Strategy Returns'))
+            fig.add_trace(go.Scatter(x=data["Date"], y=data["Strategy_index"], mode='lines', name='Strategy'))
 
-            fig.update_layout(title=f'Returns of Strategy vs Holding Stock for {ticker}',
+            fig.update_layout(title=f'Returns of Strategy vs Holding Stock for {ticker}, between {actual_start_date} and {actual_end_date}',
                             xaxis_title='Date',
                             yaxis_title='Index')
             st.plotly_chart(fig, use_container_width=True)
