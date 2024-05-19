@@ -472,7 +472,7 @@ def app():
             fig.update_layout(title=f'Returns of Strategy vs Holding Stock for {ticker}',
                             xaxis_title='Date',
                             yaxis_title='Index')
-            fig.show()
+            st.plotly_chart(fig, use_container_width=True)
 
 if __name__ == '__main__': # Run the app
     app()
