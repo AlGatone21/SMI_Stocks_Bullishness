@@ -312,7 +312,6 @@ def app():
             st.write(f"The current price of {company} ({ticker}) is {get_stock_current_price(ticker)} CHF")
 
             returns = get_stock_returns(ticker)
-            st.write(returns)
             color = "green" if returns >= 0 else "red"
             rgb = mcolors.to_rgb(color)  # Convert the color name to RGB values
             red, green, blue = [int(255 * x) for x in rgb]  # Scale the RGB values to the range 0-255
