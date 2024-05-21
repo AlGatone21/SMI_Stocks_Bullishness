@@ -283,8 +283,6 @@ st.session_state['accepted_disclaimer'] = False
 
 def app():
 
-    st.session_state['accepted_disclaimer'] = False
-
     if not st.session_state['accepted_disclaimer']:
         # Disclaimer page
         col1, col2 = st.columns([1,3])
