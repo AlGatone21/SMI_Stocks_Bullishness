@@ -312,7 +312,7 @@ def app():
             st.write(f"The current price of {company} ({ticker}) is {get_stock_current_price(ticker)} CHF")
 
             returns = get_stock_returns(ticker)
-            color = "green" #if returns >= 0 else "red"
+            color = "green" if returns >= 0 else "red"
             rgb = mcolors.to_rgb(color)  # Convert the color name to RGB values
             red, green, blue = [int(255 * x) for x in rgb]  # Scale the RGB values to the range 0-255
             st.markdown(f"The return of {ticker} for the last week is <span style='color: {color}; font-weight: bold;'>{round(returns*100,2)}%</span>", unsafe_allow_html=True)
