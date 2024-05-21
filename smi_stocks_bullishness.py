@@ -281,10 +281,7 @@ def compute_backtest(df, ticker, start_date, end_date):
 ###########################################################################################################
 
 def app():
-    if 'accepted_disclaimer' not in st.session_state:
-        st.session_state['accepted_disclaimer'] = False
-
-    if not st.session_state['accepted_disclaimer']:
+    if 'accepted_disclaimer' not in st.session_state or not st.session_state['accepted_disclaimer']:
         # Disclaimer page
         col1, col2 = st.columns([1,3])
         with col1:
