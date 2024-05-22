@@ -88,7 +88,7 @@ def get_stock_returns(ticker):
 def get_stock_series(ticker):
     try:
         stock = yf.Ticker(ticker)
-        data = stock.history(period="7d")
+        data = stock.history(period="5d")
         return data['Close']
     except:
         return "data not available"
@@ -98,7 +98,7 @@ def get_stock_series(ticker):
 def get_stock_volume(ticker):
     try:
         stock = yf.Ticker(ticker)
-        data = stock.history(period="7d")
+        data = stock.history(period="5d")
         return sum(data['Volume'])
     except:
         return "data not available"
@@ -108,7 +108,7 @@ def get_stock_volume(ticker):
 def get_stock_volatility(ticker):
     try:
         stock = yf.Ticker(ticker)
-        data = stock.history(period="7d")
+        data = stock.history(period="5d")
         data["Return"] = data["Return"] = (data["Close"] - data["Open"]) / data["Open"] # Calculate the daily returns
         return data["Return"].std() # Calculate the standard deviation of the returns
     except:
