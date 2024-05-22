@@ -329,7 +329,6 @@ def app():
 
         with col2:
             # create a gauge plot with the bullishness sentiment
-            st.button("Refresh Data", on_click=lambda: st.caching.clear_cache())
             news = get_stock_news()
             news_analyzed = analyze_news_sentiment(news)
             bullishness_sentiment = bullishness(news_analyzed)
@@ -345,6 +344,8 @@ def app():
                         'bar': {'color': color2}}))
             fig.update_layout(title="Current SMI Bullishness Index")
             st.plotly_chart(fig, use_container_width=True)
+            if st.button("Refresh Data"):
+                st.caching.clear_cache()
         
         st.write("## Stock Prediction")
         open_price = get_stock_current_price(ticker) # Get the current stock price
