@@ -329,6 +329,7 @@ def app():
 
         with col2:
             # create a gauge plot with the bullishness sentiment
+            st.button("Refresh Data", on_click=lambda: st.caching.clear_cache())
             news = get_stock_news()
             news_analyzed = analyze_news_sentiment(news)
             bullishness_sentiment = bullishness(news_analyzed)
