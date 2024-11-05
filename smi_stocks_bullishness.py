@@ -233,7 +233,7 @@ log_reg = pickle.load(open("logistic_regression.sav", 'rb'))
 # Load the SVC Model
 svc = pickle.load(open("svc.sav", 'rb'))
 
-# Load the Naive Bayes Model
+# Load the Naive Bayes Model from the file
 naive_bayes = pickle.load(open("naive_bayes.sav", 'rb'))
 
 # Load the Decision Tree Model
